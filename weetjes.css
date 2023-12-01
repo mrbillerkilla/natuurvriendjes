@@ -1,0 +1,272 @@
+body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.site {
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+.background,
+.foreground {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.background {
+    z-index: 1;
+}
+
+.foreground {
+    z-index: 2;
+}
+
+.wildcat {
+    background-image: url(https://i.gifer.com/31y5.gif);
+    background-size: cover;
+    width: 50vw;
+    height: 50vh;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.dolphin {
+    background-image: url(https://media.tenor.com/iUO7Rf7xqxgAAAAd/swimming-dolphins-moving-dolphins.gif);
+    background-size: cover;
+    width: 50vw;
+    height: 50vh;
+    position: absolute;
+    top: 50vh;
+    left: 0;
+}
+
+.elephant {
+    background-image: url(https://media3.giphy.com/media/SWKyABQ08mbXW/giphy.gif);
+    background-size: cover;
+    width: 50vw;
+    height: 50vh;
+    position: absolute;
+    top: 50vh;
+    left: 50vw;
+}
+
+.gorilla {
+    background-image: url(https://gifdb.com/images/high/flirty-tongue-funny-gorilla-yyq3302wmvrxeut7.gif);
+    background-size: cover;
+    width: 50vw;
+    height: 50vh;
+    position: absolute;
+    top: 0vh;
+    left: 50vw;
+}
+
+
+button {
+    width: 20vw; /* 140px equivalent in vw */
+    height: 8vh; /* 56px equivalent in vh */
+    overflow: hidden;
+    border: none;
+    color: #fff;
+    background: none;
+    position: relative;
+    padding-bottom: 5vw; /* 2em equivalent in vw */
+  }
+  
+  button > div, button > svg {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+  }
+  
+  button:before {
+    content: "";
+    position: absolute;
+    height: 0.4vh; /* 2px equivalent in vh */
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    transform: scaleX(0);
+    transform-origin: bottom right;
+    background: currentColor;
+    transition: transform 0.25s ease-out;
+  }
+  
+  button:hover:before {
+    transform: scaleX(1);
+    transform-origin: bottom left;
+  }
+  
+  button .clone > *, button .text > * {
+    opacity: 1;
+    font-size: 3.25vw; /* 1.3rem equivalent in vw */
+    transition: 0.2s;
+    margin-left: 1.15vw; /* 4px equivalent in vw */
+  }
+  
+  button .clone > * {
+    transform: translateY(8vw); /* 60px equivalent in vw */
+  }
+  
+  button:hover .clone > * {
+    opacity: 1;
+    transform: translateY(0);
+    transition: all 0.2s cubic-bezier(0.215, 0.61, 0.355, 1) 0s;
+  }
+  
+  button:hover .text > * {
+    opacity: 1;
+    transform: translateY(-8vw); /* -60px equivalent in vw */
+    transition: all 0.2s cubic-bezier(0.215, 0.61, 0.355, 1) 0s;
+  }
+  
+  button:hover .clone > :nth-child(1) {
+    transition-delay: 0.15s;
+  }
+  
+  button:hover .clone > :nth-child(2) {
+    transition-delay: 0.2s;
+  }
+  
+  button:hover .clone > :nth-child(3) {
+    transition-delay: 0.25s;
+  }
+  
+  button:hover .clone > :nth-child(4) {
+    transition-delay: 0.3s;
+  }
+  
+  /* Icon style and hover */
+  button svg {
+    width: 2.5vw; /* 20px equivalent in vw */
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%) rotate(-50deg);
+    transition: 0.2s ease-out;
+  }
+  
+  button:hover svg {
+    transform: translateY(-50%) rotate(-90deg);
+  }
+  #leeuw{
+    width: 26vw;
+    height: 10vh;
+    left: 10vw;
+    top: 20vh;
+    position: absolute;
+    z-index: 2;
+  }
+
+  .link-leeuw{
+    background-color: antiquewhite;
+    position: absolute;
+    width: 1vw;
+    height: 10vh;
+  }
+
+  #gorilla-b {
+    width: 14vw; /* Set the button width to 14% of the viewport width */
+    height: 5.6vh; /* Set the button height to 5.6% of the viewport height */
+    overflow: hidden;
+    border: none;
+    color: #fff;
+    background: none;
+    position: relative;
+    padding-bottom: 10vh; /* Set the padding to 10% of the viewport height */
+}
+
+#gorilla-b > div, #gorilla-b > svg {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+}
+
+#gorilla-b:before {
+    content: "";
+    position: absolute;
+    height: 0.28vh; /* Set the height to 0.28% of the viewport height */
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    transform: scaleX(0);
+    transform-origin: bottom right;
+    background: currentColor;
+    transition: transform 0.25s ease-out;
+}
+
+#gorilla-b:hover:before {
+    transform: scaleX(1);
+    transform-origin: bottom left;
+}
+
+#gorilla-b .clone1 > *, #gorilla-b .text1 > * {
+    opacity: 1;
+    font-size: 1.4vw; /* Set the font size to 1.4% of the viewport width */
+    transition: 0.2s;
+    margin-left: 0.56vw; /* Set the margin to 0.56% of the viewport width */
+}
+
+#gorilla-b .clone1 > * {
+    transform: translateY(5.6vh); /* Set the transform to 5.6% of the viewport height */
+}
+
+#gorilla-b:hover .clone1 > * {
+    opacity: 1;
+    transform: translateY(0);
+    transition: all 0.2s cubic-bezier(0.215, 0.61, 0.355, 1) 0s;
+}
+
+#gorilla-b:hover .text1 > * {
+    opacity: 1;
+    transform: translateY(-5.6vh); /* Set the transform to -5.6% of the viewport height */
+    transition: all 0.2s cubic-bezier(0.215, 0.61, 0.355, 1) 0s;
+}
+
+#gorilla-b:hover .clone1 > :nth-child(1) {
+    transition-delay: 0.14s; /* Adjust transition delay as needed */
+}
+
+#gorilla-b:hover .clone1 > :nth-child(2) {
+    transition-delay: 0.28s; /* Adjust transition delay as needed */
+}
+
+#gorilla-b:hover .clone1 > :nth-child(3) {
+    transition-delay: 0.42s; /* Adjust transition delay as needed */
+}
+
+#gorilla-b:hover .clone1 > :nth-child(4) {
+    transition-delay: 0.56s; /* Adjust transition delay as needed */
+}
+
+/* Icon style and hover */
+#gorilla-b svg {
+    width: 1.4vw; /* Set the width to 1.4% of the viewport width */
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%) rotate(-50deg);
+    transition: 0.2s ease-out;
+}
+
+#gorilla-b:hover svg {
+    transform: translateY(-50%) rotate(-90deg);
+}
+#gorilla-b{
+    width: 26vw;
+    height: 10vh;
+    left: 10vw;
+    top: 20vh;
+    position: absolute;
+    z-index: 2;
+}

@@ -1,0 +1,400 @@
+body {
+  margin: 0;
+  padding: 0;
+  user-select: none;
+}
+
+.site {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.background,
+.foreground {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.background {
+  z-index: 1;
+}
+
+.foreground {
+  z-index: 2;
+}
+
+.achtergrond {
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+}
+
+.gamevak {
+  width: 65vw;
+  height: 100vh;
+  position: absolute;
+  background-color: rgb(108 82 82 / 14%);
+  box-shadow: 0px 0px 10px 5px rgb(0 0 0 / 75%);
+  transform: translate(-50%, -50%);
+  left: 50%;
+  top: 50%;
+}
+
+.navbar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 6vw;
+  background-color: rgba(72, 116, 54, 0.41);
+  overflow: hidden;
+  transition: all 0.3s;
+  text-align: right;
+  padding: 10px;
+}
+
+.navbar:hover {
+  width: 10vw;
+  background-color: rgba(72, 116, 54, 0.803);
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+li {
+  margin: 0;
+  padding: 0;
+}
+
+
+li a {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  display: block;
+  color: white;
+  font-size: 2vh;
+  text-decoration: none;
+  padding: 1vw;
+  position: relative;
+}
+
+
+li a::before {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 2px;
+  background-color: white;
+  bottom: 0;
+  left: 0;
+  transition: width 0.4s ease-in-out;
+}
+
+li a:hover::before {
+  width: 100%;
+  transition: width 0.4s ease-in-out;
+}
+
+li a:hover {
+  background-color: rgba(78, 130, 25, 0.527);
+  transition: 0.3s ease-in-out;
+}
+
+
+.navbar:hover {
+  width: 10vw;
+  display: flex;
+  flex-direction: column;
+}
+
+li a {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  display: block;
+  color: white;
+  font-size: 2vh;
+  text-decoration: none;
+  padding: 1vw;
+  position: relative;
+  text-align: center;
+}
+
+#papier-prullenbak {
+  width: 14vw;
+  height: 18vh;
+  position: absolute;
+  left: 3vw;
+  top: 80vh;
+  z-index: 1;
+}
+
+#vuilnis-rest {
+  width: 14vw;
+  height: 18vh;
+  position: absolute;
+  left: 26vw;
+  top: 80vh;
+  border: none;
+  background: none;
+}
+
+#recycle {
+  width: 14vw;
+  height: 18vh;
+  position: absolute;
+  left: 47vw;
+  top: 80vh;
+}
+
+#vuilnis-papier {
+    width: 7vw;
+    height: 11vh;
+    position: absolute;
+    left: 26vw;
+    top: 26vh;
+    background-image: url(https://media.istockphoto.com/id/1164291054/fr/vectoriel/boule-de-papier-froiss%C3%A9e-isol%C3%A9s-sur-fond-transparent-illustration-vectorielle-pour-le.jpg?s=612x612&w=0&k=20&c=KoMqMIB6wmu1t_uiuaS-3gkKzCxs5wDkJf4Ucy-VH0w=);
+    background-size: cover;
+    background-position: center;
+    transform: rotate(137deg);
+    border: 0.4vh solid black;
+}
+
+.vuilnis-papier1 {
+  transform: rotate(334deg);
+    width: 7vw;
+    height: 12vh;
+    position: absolute;
+    left: 56vw;
+    top: 3vh;
+    background-image: url(https://media.istockphoto.com/id/515051993/nl/foto/mcdonalds-fast-food-meal-in-brown-paper-bag.jpg?s=612x612&w=0&k=20&c=TQlW6kLpr3l93CMJ2RJCp-kNYuBVsh_e1TtUA8BkXNU=);
+    background-size: cover;
+    background-position: center;
+}
+
+#dropvak-papier {
+  width: 10vw;
+  height: 15vh;
+  position: absolute;
+  top: 79vh;
+  left: 5vw;
+}
+
+#dropvak-recycle{
+  width: 10vw;
+  height: 15vh;
+  position: absolute;
+  top: 79vh;
+  left: 48vw;
+}
+.vuilnis-papier2{
+  width: 11vw;
+  height: 15vh;
+  position: absolute;
+  left: 2vw;
+  top: 47vh;
+  background-image: url(https://www.thuisleven.com/wp-content/uploads/2020/07/Oud-papier-en-karton.jpg);
+  background-size: cover;
+  background-position: center;
+  border-radius: 10px;
+  transform: rotate(310deg);
+}
+
+.vuilnis-papier3{
+  width: 7vw;
+  height: 9vh;
+  position: absolute;
+  left: 3vw;
+  top: 3vh;
+  background-size: cover;
+  background-position: center;
+  background-image: url(https://d36pj450k6628s.cloudfront.net/w_1250,h_703,q_100/s3-kassa-bnnvara/0a7dbe01-4275-42d8-bafa-c21f92e94c2b.jpg);
+  transform: rotate(17deg);
+}
+
+.vuilnis-recycle{
+  width: 7vw;
+  height: 10vh;
+  position: absolute;
+  left: 19vw;
+  top: 50vh;
+  background-image: url(https://eetcafedeparel.nl/wp-content/uploads/2021/05/spa-blauw-1.png);
+  background-size: cover;
+  background-position: center;
+  border-radius: 10px;
+  transform: rotate(310deg);
+}
+
+.vuilnis-recycle1{
+  width: 4vw;
+  height: 11vh;
+  position: absolute;
+  left: 50vw;
+  top: 50vh;
+  background-image: url(https://media.s-bol.com/gMQgP885EkJ9/A685MBp/550x693.jpg);
+  background-size: cover;
+  background-position: center;
+  border-radius: 10px;
+  transform: rotate(75deg);
+}
+
+.vuilnis-recycle2{
+  width: 4vw;
+  height: 11vh;
+  position: absolute;
+  left: 50vw;
+  top: 50vh;
+  background-image: url(https://media.s-bol.com/gMQgP885EkJ9/A685MBp/550x693.jpg);
+  background-size: cover;
+  background-position: center;
+  border-radius: 10px;
+  transform: rotate(75deg);
+}
+
+.vuilnis-recycle2{
+  width: 4vw;
+  height: 11vh;
+  position: absolute;
+  left: 46vw;
+  top: 21vh;
+  background-image: url(https://static.wixstatic.com/media/925b42_c5ba54d7cded4065871db122da915132~mv2.png/v1/fill/w_480,h_480,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/925b42_c5ba54d7cded4065871db122da915132~mv2.png);
+  background-size: cover;
+  background-position: center;
+  border-radius: 10px;
+  transform: rotate(21deg);
+}
+
+.vuilnis-recycle3{
+  width: 4vw;
+  height: 11vh;
+  position: absolute;
+  left: 24vw;
+  top: 3vh;
+  background-image: url(https://www.frisland.nl/resize/lipton-green_blik_7545013884764.png/0/1100/True/lipton-ice-tea-green-24-x-330-ml-3.png);
+  background-size: cover;
+  background-position: center;
+  border-radius: 10px;
+  transform: rotate(315deg);
+
+}
+
+.vuilnis-rest{
+  width: 9vw;
+    height: 11vh;
+    position: absolute;
+    left: 10vw;
+    top: 24vh;
+    background-image: url(https://afbeelding.dvhn.nl/dvhn/incoming/jyujcj-Naamloos.png/alternates/LANDSCAPE_1920/Naamloos.png);
+    background-size: cover;
+    background-position: center;
+    border-radius: 10px;
+    transform: rotate(315deg);
+    cursor: move;
+}
+.vuilnis-rest2{
+  width: 9vw;
+    height: 11vh;
+    position: absolute;
+    left: 42vw;
+    top: 5vh;
+    background-image: url(https://www.amstelveenweb.com/afbeeldingen/2018-diepvries-gehakt.jpg);
+    background-size: cover;
+    background-position: center;
+    border-radius: 10px;
+    transform: rotate(315deg);
+}
+.vuilnis-rest3{
+  width: 9vw;
+  height: 11vh;
+  position: absolute;
+  left: 34vw;
+  top: 43vh;
+  background-image: url(https://www.vetinst.no/nyheter/mugg-pa-maten-dette-ma-du-kaste/_/image/d8b7d20f-6a36-48cb-84ba-31d38d66ce3c:116f97536f436dc70136c413138f40c66b6fd545/max-2400/20230609_Mugg_web.jpg);
+  background-size: cover;
+  background-position: center;
+  border-radius: 10px;
+  transform: rotate(315deg);
+}
+
+.vuilnis-rest4{
+  width: 9vw;
+    height: 11vh;
+    position: absolute;
+    left: 50vw;
+    top: 33vh;
+    background-image: url(https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Moldy_nectarines.jpg/640px-Moldy_nectarines.jpg);
+    background-size: cover;
+    background-position: center;
+    border-radius: 10px;
+    transform: rotate(315deg);
+}
+
+#dropvak-rest{
+  /* hai */
+  width: 10vw;
+  height: 15vh;
+  position: absolute;
+  top: 79vh;
+  left: 23vw;
+}
+
+.titel-papier{
+  width: 25vw;
+  height: 15vh;
+  position: absolute;
+  top: -3vh;
+  left: 65vw;
+}
+
+.titel-rest{
+  width: 28vw;
+  height: 15vh;
+  position: absolute;
+  top: 10vh;
+  left: 65vw;
+}
+.titel-recycle{
+  width: 28vw;
+  height: 15vh;
+  position: absolute;
+  top: 25vh;
+  left: 65vw;
+}
+
+#teller-papier{
+  width: 28vw;
+  height: 15vh;
+  position: absolute;
+  top: 3vh;
+  left: 68vw;
+}
+
+#teller-recycle{
+  width: 28vw;
+  height: 15vh;
+  position: absolute;
+  top: 16vh;
+  left: 68vw;
+}
+
+#teller-rest{
+  width: 28vw;
+  height: 15vh;
+  position: absolute;
+  top: 32vh;
+  left: 68vw;
+}
+
+.vuilnis-rest, .vuilnis-recycle, .vuilnis-papier {
+  position: absolute;
+  cursor: grab; /* Muisaanwijzer verandert in een handje */
+  user-select: none; /* Voorkomt tekstselectie tijdens slepen */
+  /* Zorg ervoor dat z-index hoger is dan andere elementen indien nodig */
+}

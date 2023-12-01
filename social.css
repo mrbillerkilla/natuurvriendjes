@@ -1,0 +1,634 @@
+body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  background: #1F2024;
+  font-family: ubuntu;
+  margin-bottom: auto;
+  scrollbar-width: thin; 
+  scrollbar-color: #888 #f4f4f4; 
+}
+body::-webkit-scrollbar {
+  width: 0.5vw; 
+}
+
+body::-webkit-scrollbar-thumb {
+  background-color: #888; 
+  border-radius: 4px; 
+}
+
+body::-webkit-scrollbar-thumb:hover {
+  background-color: #555;
+}
+
+
+body::-webkit-scrollbar-track {
+  background-color: #f4f4f4; 
+}
+
+
+.posten{
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+    height: 5vh;
+    width: 2.5vw;
+    border: 0.5vh solid black;
+    text-align: center;
+    line-height: 120%;
+    font-size: 4vh;
+    border-radius: 50%;
+    background: grey;
+    transition: 0.5s;
+
+}
+.posten:hover{
+    background: white;
+    color: grey;
+    cursor: pointer;
+    top: 58%;
+
+}
+.bar{
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    height: 7vh;
+    width: 100vw;
+    border: 0.4vh solid black;
+    border-bottom: 0;
+    border-left: 0;
+    z-index: 99;
+    background: white;
+
+}
+.formPost{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    background: white;
+    border: 0.4vh solid black;
+    transform: translate(-50%,-50%);
+    height: 80vh;
+    width: 80vw;
+    z-index: 2;
+    display: none;
+}
+.terug{
+    right: 1%;
+    top: 6%;
+    position: absolute;
+    font-size: 5vh;    
+    transform: translate(-50%,-50%);
+    cursor: pointer;
+    border: 0.4vh solid black;
+    border-radius: 50%;
+    width: 3vw;
+    height: 6vh;
+    text-align: center;
+    background: red;
+    color: white;
+    transition: 0.5s;
+    font-family: Arial, Helvetica, sans-serif;
+  
+}
+.terug:hover{
+   color: red;
+   background: white;
+  
+}
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 97.3vh;
+    width: 6vw;
+    background-color: rgba(72, 116, 54, 0.41);
+    overflow: hidden;
+    transition: all 0.3s;
+    text-align: right; 
+    padding: 10px; 
+    z-index: 99;
+  }
+
+  .navbar:hover {
+    width: 10vw;
+    background-color: rgba(72, 116, 54, 0.803);
+  }
+
+  ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  li {
+    margin: 0;
+    padding: 0;
+  }
+
+
+  li a {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: block;
+    color: white;
+    font-size: 2vh;
+    text-decoration: none;
+    padding: 1vw;
+    position: relative;
+  }
+
+
+  li a::before {
+    content: "";
+    position: absolute;
+    width: 0;
+    height: 2px;
+    background-color: white;
+    bottom: 0;
+    left: 0;
+    transition: width 0.4s ease-in-out;
+  }
+
+  li a:hover::before {
+    width: 100%;
+    transition: width 0.4s ease-in-out;
+  }
+
+  li a:hover {
+    background-color: rgba(78, 130, 25, 0.527);
+    transition: 0.3s ease-in-out;
+  }
+
+    
+.navbar:hover {
+  width: 10vw;
+  display: flex; 
+  flex-direction: column; 
+}
+
+li a {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  display: block;
+  color: white;
+  font-size: 2vh;
+  text-decoration: none;
+  padding: 1vw;
+  position: relative;
+  text-align: center; 
+}
+
+#papier-prullenbak{
+  width: 14vw;
+  height: 18vh;
+  position: absolute;
+  left: 3vw;
+  top: 80vh;
+  z-index: 1;
+}
+#vuilnis-rest{
+  width: 14vw;
+  height: 18vh;
+  position: absolute;
+  left: 26vw;
+  top: 80vh;
+}
+#recycle{
+  width: 14vw;
+  height: 18vh;
+  position: absolute;
+  left: 47vw;
+  top: 80vh;
+}
+
+#vuilnis-papier{
+  width: 14vw;
+  height: 18vh;
+  position: absolute;
+  left: 47vw;
+  top: 24vh;
+  border: 0.4vh solid black;
+}
+
+#dropvak-papier{
+  
+  width: 12vw;
+  height: 11vh;
+  position: absolute;
+  border-color: #000000;
+  top: 67vh;
+  left: 4vw;
+  border-radius: 10px;
+  border-style: groove;
+  z-index: 0;
+}
+.custum-file-upload {
+  height: 50vh;
+  width: 25vw;
+  display: flex;
+  flex-direction: column;
+  align-items: space-between;
+  gap: 2vh;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  border: 0.4vh dashed #cacaca;
+  background-color: rgba(255, 255, 255, 1);
+  padding: 1.5rem;
+  border-radius: 1vh;
+  box-shadow: 0px 48px 35px -48px rgba(0,0,0,0.1);
+  transform: translate(-50%,-50%);
+  position: absolute;
+  font-family: Arial, Helvetica, sans-serif;
+  left: 25%;  
+  top: 50%;
+  font-size: 4vh;
+}
+
+.custum-file-upload .icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.custum-file-upload .icon svg {
+  height: 8vh;
+  fill: rgba(75, 85, 99, 1);
+}
+
+.custum-file-upload .text {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.custum-file-upload .text span {
+  font-weight: 400;
+  color: rgba(75, 85, 99, 1);
+}
+
+.custum-file-upload input {
+  display: none;
+}
+.image-container {
+  max-width: 100%; 
+  max-height: 300px; 
+  display: none;
+}
+
+#uploaded-image {
+  max-width: 100%; 
+  max-height: 100%; 
+  display: block;
+  margin: 0 auto; 
+}
+
+.bericht{
+  position: absolute;
+  transform: translate(-50%,-50%);
+  height: 25vh;
+  width: 25vw;
+  left: 70%;
+  top: 50%;
+  border: 0.4vh solid black;
+  
+  
+}
+.berichttitle{
+  position: absolute;
+  left: 70%;
+  top: 20%;
+  transform: translate(-50%,-50%);
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 4vh;
+}
+
+.upload{
+  height: 5vh;
+  width: 10vw;
+  left: 64%;
+  top: 75%;
+  position: absolute;
+  border-radius: 4vh;
+  background: grey;
+  color: white;
+  font-weight: bold;
+  border: 0.4vh solid black;
+  font-size: 2vh;
+  transition: 0.5s;
+  text-transform: uppercase;
+}
+
+.upload:hover{
+  background: black;
+}
+
+#image-container {
+  position: relative;
+  width: 50vw;
+  height: 50vh;
+  left: 25%;
+  text-align: center;
+  
+  
+}
+
+#image-container img {
+  width: auto;
+  height: 50vh;
+  margin-bottom: 20vh;
+  margin-top: 10vh;
+  border: 0.4vh solid black; 
+ 
+}
+  
+
+
+#enlarged-image {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 999999;
+}
+
+#enlarged-image img {
+  max-width: 90%;
+  max-height: 90%;
+  object-fit: contain;
+  cursor: pointer;
+  z-index: 999999;
+}
+
+#image-container p {
+  margin-top: -21vh;
+  border: 0.4vh solid black;
+  height: auto;
+  width: 97%;
+  color: white;
+  font-family: Arial, Helvetica, sans-serif;
+  background: darkgreen;
+  font-size: auto;
+  text-align: left;
+  line-height: 400%;
+  padding-left: 3%;
+}
+  
+.deletebutton{
+  position: absolute;
+  left: 110%;
+  transform: translate(-50%,-50%);
+  margin-top: 4.2%;
+  background: red;
+  color: white;
+  border-radius: 5vh;
+  height: 5vh;
+  width: 6vw;
+  border: 0.4vh solid black;
+  transition: 0.5s;
+  font-family: Arial, Helvetica, sans-serif;
+ 
+}
+
+.deletebutton:hover{
+  background: white;
+  color: red;
+  cursor: pointer;
+}
+.reactieKnop{
+  position: absolute;
+  left: -10%;
+  transform: translate(-50%,-50%);
+  margin-top: 4.2%;
+  color: rgb(0, 0, 0);
+  border-radius: 5vh;
+  height: 5vh;
+  width: 6vw;
+  border: 0.4vh solid black;
+  transition: 0.5s;
+  font-family: Arial, Helvetica, sans-serif;
+  
+}
+
+.reactieKnop:hover{
+  background: black;
+  color: white;
+  cursor: pointer;
+  
+}
+
+.reactieblad{
+  height: 80vh;
+  width: 80vw;
+  z-index: 999;
+  position: fixed;
+  background: rgb(146, 139, 139);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  display: none;
+}
+
+.knopsluitenreactie{
+  background: red;
+    position: absolute;
+    left: 50%;
+    top: 3.5%;
+    z-index: 9999999;
+    transform: translate(-50%,-50%);
+    transition: 0.5s;
+    border: 0.4vh solid black;
+    border-radius: 2vh;
+
+}
+
+.knopsluitenreactie:hover{
+  background: white;
+  color: red;
+  cursor: pointer;
+}
+
+.tekstReactieBerichtContainer{
+  position: absolute;
+  top: 7%;
+  width: 80vw;
+  height: 13vh;
+  background: none;
+  overflow-y: auto; 
+  overflow-x: hidden;/* Voeg een verticale schuifbalk toe als dat nodig is */
+  position: relative; /* Verander de positionering naar relatief */
+  max-height: 13vh; /* Voeg een maximale hoogte toe */
+}
+
+.tekstReactieBerichtContainer::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Definieer de stijl van de scrollbar track (achtergrond) */
+.tekstReactieBerichtContainer::-webkit-scrollbar-track {
+  background: #77d568; /* Achtergrondkleur van de scrollbar track */
+  border-radius: 5px;
+}
+
+/* Definieer de stijl van de scrollbar thumb (het bewegende deel van de scrollbar) */
+.tekstReactieBerichtContainer::-webkit-scrollbar-thumb {
+  background: #555; /* Kleur van de scrollbar thumb */
+  border-radius: 5px; /* Afgeronde hoeken van de scrollbar thumb */
+}
+
+/* Stijl van de scrollbar thumb bij hover (optioneel) */
+.tekstReactieBerichtContainer::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.tekstReactieBericht{
+  position: absolute;
+  border: 0.4vh solid black;
+  height: auto;
+  width: 97%;
+  color: white;
+  font-family: Arial, Helvetica, sans-serif;
+  background: darkgreen;
+  padding-left: 3%;
+  font-size: 3vh;
+  top: 0;
+  font-size: auto;
+  text-align: left;
+  line-height: 400%;
+  padding-left: 3%;
+  margin-top: 0%;
+  
+
+}
+
+.inputReactie{
+  position: absolute;
+  top: 93%;
+  width: 60vw;
+  height: 6vh;
+  left: 40%;
+  transform: translate(-50%,-50%);
+}
+
+.vestuurReactie{
+  position: absolute;
+  top: 93%;
+  transform: translate(-50%,-50%);
+  left: 89%;
+  height: 6vh;
+  width: 15vw;
+  color: white;
+  background: green;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: bold;
+  border:  0.4vh solid black;
+  transition: 0.5s;
+}
+
+
+.vestuurReactie:hover{
+  background: white;
+  color: green;
+  cursor: pointer;
+}
+
+.reactieTekst{
+  position: relative;
+  transform: translate(-50%,-50%);
+  left: 50%;
+  top: 100%;
+  border: none;
+  display: none;
+}
+
+.commentContainer {
+  overflow-y: auto; 
+  overflow-x: hidden;/* Voeg een verticale schuifbalk toe als dat nodig is */
+  position: relative; /* Verander de positionering naar relatief */
+  max-height: 50vh; /* Voeg een maximale hoogte toe */
+  width: 80vw;
+  top: 7%;
+  height: auto;
+  background: rgb(146, 139, 139);
+  margin-top: 10px; /* Voeg wat ruimte boven de container toe */
+  padding: 10px; /* Voeg wat padding toe om de reacties te scheiden van de containerrand */
+  box-sizing: border-box; 
+  z-index: 99999;/* Zorg ervoor dat padding niet de hoogte beïnvloedt */
+}
+.commentContainer::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Definieer de stijl van de scrollbar track (achtergrond) */
+.commentContainer::-webkit-scrollbar-track {
+  background: #77d568; /* Achtergrondkleur van de scrollbar track */
+  border-radius: 5px;
+}
+
+/* Definieer de stijl van de scrollbar thumb (het bewegende deel van de scrollbar) */
+.commentContainer::-webkit-scrollbar-thumb {
+  background: #555; /* Kleur van de scrollbar thumb */
+  border-radius: 5px; /* Afgeronde hoeken van de scrollbar thumb */
+}
+
+/* Stijl van de scrollbar thumb bij hover (optioneel) */
+.commentContainer::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+
+
+.commentParagraph {
+  position: relative;
+  border: 0.4vh solid black;
+  height: auto;
+  width: 97%;
+  color: white;
+  font-family: Arial, Helvetica, sans-serif;
+  background: darkgreen;
+  padding-left: 3%;
+  text-align: left;
+  font-size: 3vh;
+  
+}
+
+.refreshKnop{
+  position: absolute;
+  left: 45%;
+  top:  3.5%;
+  transform: translate(-50%,-50%);
+  z-index: 99999;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: bold;
+  color: lightblue;
+  background-color: #555;
+  border: 0.4vh solid black;
+  border-radius: 4vh;
+  transition: 0.5s;
+}
+
+.refreshKnop:hover{
+  background: lightblue;
+  color: #555;
+  cursor: pointer;
+}
+
+.reactieTitle{
+  position: absolute;
+  z-index: 9999999;
+  transform: translate(-50%,-50%);
+  top: 27%;
+  left: 50%;
+  font-family: Arial, Helvetica, sans-serif;
+  color: white;
+  font-weight: bold;
+  font-size: 4vh;
+  display: none;
+}

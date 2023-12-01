@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css" type="text/css">
+    <script src="title.js"></script>
+    <script src="../app.js"></script> 
+    <link rel="icon" type="image/x-icon" href="">
+</head>
+<body>
+    <div class="site">
+        <div class="background" >  
+            <video class="background-video" autoplay loop muted>
+                <source src="" type="video/mp4">
+            </video>  
+            <img class="fotologo" src="Achtergrond/nieuwelogo.png" onclick="secret()">
+            <!-- Probeer classes met kleine letters te typen. Dus bijvoorbeeld login-text. -->
+            
+            <form action="/login" method="POST" class="form">
+                <h1 class="loginText">Login</h1>
+                <div>
+                    <input type="text" id="username" name="username" placeholder="Naam" required>
+                </div>
+                <div>
+                    <input type="password" id="password" name="password" placeholder="Wachtwoord" required>
+                    
+                </div>
+                <button class="loginknop" type="submit" role="button">Login</button>
+                <a class="RegiKnop" onclick="openregi()">Naar Registratie</a>
+                <a class="WachtwoordV">Wachtwoord Vergeten</a>
+            </form>
+            <form class="registrerenform" action="/register" method="POST">
+                <h1 class="regiText">Registratie</h1>
+                <input type="text" id="usernameR" name="usernameR" placeholder="Naam" required><br><br>
+                <input type="password" id="passwordR" name="passwordR" placeholder="Wachtwoord" required><br><br>
+                <input type="email" id="emailR" name="emailR" placeholder="E-Mail" required><br><br>
+                
+                <input class="registratieknop" type="submit" value="Registreren">
+                <a class="loginterugknop" onclick="openlogin()">Naar Login</a>
+            
+                <!-- Add a message element to display the registration result -->
+                <div id="registrationResult"></div>
+            </form>
+              
+            <div id="errorMessage" style="display: none;"></div>
+
+        </div>
+    </div>
+</body>
+<script>
+
+    var secretW = 0; 
+    function openregi(){
+        let form = document.querySelector(".form");
+        let regiform = document.querySelector(".registrerenform");
+
+
+        regiform.style.top = "54%"
+        form.style.top   = "-100%"; 
+    }
+
+    function openlogin(){
+        let form = document.querySelector(".form");
+        let regiform = document.querySelector(".registrerenform");
+
+
+        regiform.style.top = "200%"
+        form.style.top   = "54%";
+    }
+    function secret(){
+        secretW += 1;
+
+        if (secretW === 10) {
+        window.location.href = "fatih-sex.html";
+        secretW = 0;
+    }
+    }
+
+
+
+</script>
+
+<!-- <a class="btn btn-primary" href="thankyou.ejs" role="button">Submit</a> -->

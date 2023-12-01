@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="social.css">
+    <link rel="icon" type="image/x-icon" href="Achtergrond/Lovepik_com-400380195-earth.png">
+    <script src="title.js"></script>
+</head>
+<body>  
+    <div class="bar">
+        <a class="posten" onclick="openpost()">+</a>
+    </div>
+    <form class="formPost" action="/upload" method="POST" enctype="multipart/form-data">
+        <div class="terug" onclick="closepost()">X</div>
+        <label class="custum-file-upload" for="file">
+            <div class="icon">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="" viewBox="0 0 24 24"><g stroke-width="0" id="SVGRepo_bgCarrier"></g><g stroke-linejoin="round" stroke-linecap="round" id="SVGRepo_tracerCarrier"></g><g id="SVGRepo_iconCarrier"> <path fill="" d="M10 1C9.73478 1 9.48043 1.10536 9.29289 1.29289L3.29289 7.29289C3.10536 7.48043 3 7.73478 3 8V20C3 21.6569 4.34315 23 6 23H7C7.55228 23 8 22.5523 8 22C8 21.4477 7.55228 21 7 21H6C5.44772 21 5 20.5523 5 20V9H10C10.5523 9 11 8.55228 11 8V3H18C18.5523 3 19 3.44772 19 4V9C19 9.55228 19.4477 10 20 10C20.5523 10 21 9.55228 21 9V4C21 2.34315 19.6569 1 18 1H10ZM9 7H6.41421L9 4.41421V7ZM14 15.5C14 14.1193 15.1193 13 16.5 13C17.8807 13 19 14.1193 19 15.5V16V17H20C21.1046 17 22 17.8954 22 19C22 20.1046 21.1046 21 20 21H13C11.8954 21 11 20.1046 11 19C11 17.8954 11.8954 17 13 17H14V16V15.5ZM16.5 11C14.142 11 12.2076 12.8136 12.0156 15.122C10.2825 15.5606 9 17.1305 9 19C9 21.2091 10.7909 23 13 23H20C22.2091 23 24 21.2091 24 19C24 17.1305 22.7175 15.5606 20.9844 15.122C20.7924 12.8136 18.858 11 16.5 11Z" clip-rule="evenodd" fill-rule="evenodd"></path> </g></svg>
+            </div>
+            <div class="image-container">
+                <img id="uploaded-image" src="" alt="Uploaded Image" name="uploaded-image">
+            </div>
+            <div class="text">  
+                <span>Klik voor bestand uploaden</span>
+            </div>
+            <input type="file" id="file" name="uploaded-image"> <!-- Add the name attribute -->
+        </label>
+        <h1 class="berichttitle"  id="berichttitle">Bericht</h1>
+        <input class="bericht" id="bericht" name="bericht" required>
+        <button class="upload">Upload</button>
+    </form>
+
+
+    <div id="image-container">
+        <!-- Images will be dynamically added here -->
+    </div>
+    <div id="enlarged-image">
+        <!-- Hier wordt de vergrote afbeelding weergegeven -->
+      </div>
+      
+    
+    <nav class="navbar">
+        <ul>
+            <li><a href="home.html">HOME</a></li>
+            <li><a href="info.html">TIPS</a></li>
+            <li><a href="game.html">GAME</a></li>
+            <li><a href="social.html">SOCIAL</a></li>
+        </ul>
+    </nav>
+</body>
+</html>
+<script src="../app.js"></script>
+<script>
+    var fromPost = document.querySelector(".formPost");
+    
+    function closepost(){
+        fromPost.style.display = 'none';
+    }
+    function openpost(){
+        fromPost.style.display = 'block';
+    }
+
+document.getElementById("file").addEventListener("change", function(event) {
+
+    var iconupload = document.querySelector(".icon");
+    iconupload.style.display = "none";
+
+    var imagecon = document.querySelector(".image-container");
+    imagecon.style.display = "block";
+
+    const selectedFiles = event.target.files;
+    const imageContainer = document.querySelector(".image-container");
+    const uploadedImage = document.getElementById("uploaded-image");
+
+    if (selectedFiles.length > 0) {
+        const file = selectedFiles[0];
+        const fileName = file.name;
+
+        if (file.type.startsWith("image/")) {
+            const imageUrl = URL.createObjectURL(file);
+            uploadedImage.src = imageUrl;
+            document.querySelector(".text").innerHTML = "Klik voor bestand uploaden";
+        } else {
+            document.querySelector(".text").innerHTML = "Dit is geen geldige afbeelding.";
+            uploadedImage.src = ""; 
+        }
+    } else {
+        document.querySelector(".text").innerHTML = "Geen bestand geselecteerd.";
+        uploadedImage.src = "";
+    }
+});
+
+
+let usernameLoginW;
+
+function fetchAndDisplayUsername() {
+    return fetch("/home")
+        .then((response) => response.json())
+        .then((data) => {
+            usernameLoginW = data.username;
+            const usernameElement = document.getElementById("username-placeholder");
+            if (usernameElement) {
+                if (data.username && data.username !== "") {
+                    usernameElement.textContent = data.username;
+                } else {
+                
+                    window.location.href = "/index.html";
+                }
+            }
+            return data.username;
+        })
+        .catch((error) => {
+            console.error("Error fetching username:", error);
+            
+            window.location.href = "/index.html";
+        });
+}
+
+
+
+fetchAndDisplayUsername()
+    .then((username) => {
+       
+    
+    fetch("/get-all-images")
+  .then((response) => response.json())
+  .then((data) => {
+    const imageContainer = document.getElementById("image-container");
+
+    // Function to shuffle the data array randomly
+    function shuffleArray(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+    }
+
+    shuffleArray(data); // Shuffle the data array
+
+    data.forEach((imageData) => {
+        
+      const imgElement = document.createElement("img");
+
+      const byteArray = new Uint8Array(imageData.foto);
+      const blob = new Blob([byteArray], { type: "image/jpeg" });
+
+      const imageUrl = URL.createObjectURL(blob);
+      imgElement.src = "/" + imageData.foto;
+      imgElement.alt = "Uploaded Image";
+
+      const imageDiv = document.createElement("div");
+      imageDiv.appendChild(imgElement);
+
+      const berichtParagraph = document.createElement("p");
+      berichtParagraph.textContent = `${imageData.Gebruikersnaam}: ${imageData.bericht}`;
+      imageDiv.appendChild(berichtParagraph);
+
+      if(imageData.Gebruikersnaam == username){
+        const deletebutton = document.createElement("button");
+        deletebutton.className = "deletebutton";
+        deletebutton.textContent = `Verwijderen`;
+        deletebutton.addEventListener("click", function () {
+
+            // Stuurt een signaal naar de server dat de foto verwijderd moet worden.
+            // In het bestand 'app.js' wordt deze verzoek afgehandeld.
+            fetch("/delete-post", {
+                body: JSON.stringify(imageData), // De body word getransformeerd naar een string.
+                method: "post", // Met deze methode kun je gegevens naar de server sturen.
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            }).then(function() {
+                imageDiv.remove(); // Verwijderd het HTML element.
+            }).catch(function(err) {
+                // Deze functie word als er een fout is opgetreden.
+
+                console.log(err);
+            });
+        });
+        berichtParagraph.appendChild(deletebutton);
+      };
+
+      const reactieblad = document.createElement("div");
+      reactieblad.className = "reactieblad";
+      imageDiv.appendChild(reactieblad);
+
+      
+
+
+      const inputReactie = document.createElement("input");
+      inputReactie.className = "inputReactie";
+      inputReactie.required = true;
+      reactieblad.appendChild(inputReactie);
+
+      const vestuurReactie = document.createElement("button");
+      vestuurReactie.className = "vestuurReactie";
+      vestuurReactie.textContent = "Vestuur";
+      reactieblad.appendChild(vestuurReactie);
+
+      vestuurReactie.addEventListener("click", function() {
+        const reactieTekst = inputReactie.value; // Get the input value
+
+        // Check if the input field is empty
+        if (reactieTekst.trim() === "") {
+            alert("Vul wat in!");
+            return; // Don't proceed with the request
+        }
+        fetch("/verstuurReactie", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                UploadID: imageData.ID, // Voeg het bijbehorende UploadID toe
+                ReactieTekst: reactieTekst,
+                Gebruikersnaam: username // Gebruik de correcte eigenschapnamen
+            })
+        })
+        .then(response => {
+            if (response.ok) {
+                // Verwerk de succesvolle respons hier
+                const newCommentParagraph = document.createElement("h1");
+                newCommentParagraph.textContent = `${username}: ${reactieTekst}`;
+                newCommentParagraph.className = "commentParagraph";
+                reactieContainer.appendChild(newCommentParagraph);
+
+        // Leeg het invoerveld
+                inputReactie.value = "";
+            } else {
+                // Verwerk eventuele fouten hier
+                console.error("Er is een fout opgetreden bij het verzenden van de reactie naar de database");
+            }
+        })
+        .catch(error => {
+            console.error("Er is een fout opgetreden bij het uitvoeren van het POST-verzoek:", error);
+        });
+    });
+
+
+      const tekstReactieBerichtContainer = document.createElement("div");
+      tekstReactieBerichtContainer.className = "tekstReactieBerichtContainer";
+
+
+
+      const tekstReactieBericht = document.createElement("h1");
+      tekstReactieBericht.className = "tekstReactieBericht";
+      tekstReactieBericht.textContent = imageData.Gebruikersnaam + ": " + imageData.bericht;
+      
+      tekstReactieBerichtContainer.appendChild(tekstReactieBericht);
+      reactieblad.appendChild(tekstReactieBerichtContainer);
+
+      const reactieTekst = document.createElement("p");
+      reactieTekst.className = "reactieTekst";
+      reactieTekst.textContent = "";
+      
+    
+      const reactieContainer = document.createElement("div");
+      reactieContainer.className = "commentContainer";
+      reactieblad.appendChild(reactieContainer);
+
+      const reactieKnop = document.createElement("button");
+      reactieKnop.className = "reactieKnop";
+      reactieKnop.textContent = "Reacties";
+      reactieKnop.addEventListener("click", function(){
+            reactieblad.style.display = "block";
+
+
+            fetch(`/get-all-reacties?UploadID=${imageData.ID}`)
+            .then((response) => response.json())
+            .then((data) => {
+                // Verwerk de ontvangen reacties en toon ze in reactieTekst
+                reactieTekst.innerHTML = ""; // Leeg eerst de reactieTekst
+                data.forEach((comment) => {
+                    const commentParagraph = document.createElement("h1");
+                    commentParagraph.textContent = `${comment.Gebruikersnaam}: ${comment.ReactieTekst}`;
+                    commentParagraph.className = "commentParagraph";
+                    reactieContainer.appendChild(commentParagraph);
+                });
+            })
+            .catch((error) => {
+                console.error("Error fetching comments: ", error);
+            });
+        });
+      
+
+    const knopsluitenreactie = document.createElement("button");
+      knopsluitenreactie.className = "knopsluitenreactie";
+      knopsluitenreactie.textContent = "X";
+      knopsluitenreactie.addEventListener("click", function(){
+        reactieblad.style.display = "none";
+        while (reactieContainer.firstChild) {
+        reactieContainer.removeChild(reactieContainer.firstChild);
+        }
+        
+      })
+      reactieblad.appendChild(knopsluitenreactie);
+
+
+
+      const refreshKnop = document.createElement("button");
+      refreshKnop.textContent = "Refresh";
+      refreshKnop.className = 'refreshKnop';
+      refreshKnop.addEventListener("click", function(){
+        while (reactieContainer.firstChild) {
+        reactieContainer.removeChild(reactieContainer.firstChild);
+        }
+
+
+
+
+        fetch(`/get-all-reacties?UploadID=${imageData.ID}`)
+            .then((response) => response.json())
+            .then((data) => {
+                // Verwerk de ontvangen reacties en toon ze in reactieTekst
+                reactieTekst.innerHTML = ""; // Leeg eerst de reactieTekst
+                data.forEach((comment) => {
+                    const commentParagraph = document.createElement("h1");
+                    commentParagraph.textContent = `${comment.Gebruikersnaam}: ${comment.ReactieTekst}`;
+                    commentParagraph.className = "commentParagraph";
+                    reactieContainer.appendChild(commentParagraph);
+                });
+            })
+            .catch((error) => {
+                console.error("Error fetching comments: ", error);
+            });
+      })
+      reactieblad.appendChild(refreshKnop);
+
+
+      const reactieTitle = document.createElement("h1");
+      reactieTitle.textContent = "Reacties:";
+      reactieTitle.className = "reactieTitle";
+
+      reactieblad.appendChild(reactieTitle);
+
+      
+      reactieblad.appendChild(reactieTekst);
+      berichtParagraph.appendChild(reactieKnop);
+
+
+      
+
+
+      imageContainer.appendChild(imageDiv);
+    });
+  })
+  .catch((error) => {
+    console.error("Error fetching images: ", error);
+  });
+});
+
+
+
+
+const imageContainer = document.getElementById("image-container");
+const enlargedImage = document.getElementById("enlarged-image");
+
+// Voeg een eventlistener toe aan het imageContainer voor het klikken op miniaturen
+imageContainer.addEventListener("click", function(event) {
+  if (event.target.tagName === "IMG") {
+    // Haal de bron op van de geklikte afbeelding
+    const src = event.target.src;
+
+    // Stel de bron in voor de vergrote afbeelding
+    enlargedImage.innerHTML = `<img src="${src}" alt="Vergrote Afbeelding">`;
+
+    // Toon de vergrote afbeelding
+    enlargedImage.style.display = "flex";
+  }
+});
+
+// Voeg een eventlistener toe aan de vergrote afbeelding om deze te verbergen wanneer erop wordt geklikt
+enlargedImage.addEventListener("click", function() {
+  enlargedImage.style.display = "none";
+});
+
+
+</script>

@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>home</title>
+    <link rel="stylesheet" href="home.css">
+    <script src="title.js"></script>
+    <link rel="icon" type="image/x-icon" href="Achtergrond/Lovepik_com-400380195-earth.png">
+
+</head>
+<body> 
+
+    <div class="container">
+        <div class="blob-c">
+        <div class="shape-blob"></div>
+        <div class="shape-blob one"></div>
+        <div class="shape-blob two"></div>
+        <div class="shape-blob three"></div>
+        <div class="shape-blob four"></div>
+        <div class="shape-blob five"></div>
+        <div class="shape-blob six"></div> 
+        </div>
+    <h1><br><br></h1>
+    </div>
+
+    <div class="textBlok">
+        <h1>Speel de gratis afval minigame!</h1>
+        <p>Meer weten over afval scheiden?</p>
+       
+        <button class="button-29" role="button" onclick="window.location.href='game.html'">
+            <a href="game.html">Ontdek wat jij kan doen 🡢</a>
+          </button>
+          
+        
+      </div>
+      
+      <div class="textBlok2">
+        <h1>Voeg je eigen content toe</h1>
+        <p></p>
+        <button class="buttonSocialmedia" role="button" onclick="window.location.href='social.html'">
+            <a href="social.html">Ga naar de social pagina 🡢</a>
+          </button>
+      </div>
+
+      <div class="textBlok3">
+        <h1>a</h1>
+        <p>a</p>
+      </div>
+
+      <div class="textBlok4">
+        <h1>a</h1>
+        <p>a</p>
+      </div>
+
+      <div class="textBlok5">
+        <h1>a</h1>
+        <p>a</p>
+      </div>
+      
+      <div class="infoTextBlok1">
+        <h1>In Nederland zijn we al goed op weg met afval scheiden. Ruim de helft van ons afval leveren we gescheiden in. Van ons huishoudelijk oud papier en glas brengen we zelfs zo’n 75 procent naar de papier- of glasbak. Door het afval te recyclen, besparen we nieuwe grondstoffen, energie en geld. Door ons afval als grondstof te gebruiken, besparen we op onze primaire grondstoffen. Er hoeven bijvoorbeeld minder bomen gekapt te worden voor papier en we hoeven minder aardolie te winnen voor plastic.</h1>
+        <p>Waarom is afval scheiden belangrijk?</p>
+       
+        <img class="img" src="https://i.imgur.com/wOCQf2n.jpg" alt="">
+    </div>
+
+
+
+
+      <div class="footer">
+      </div>
+
+
+      <div class="Uitgelicht">
+        <h1>Uitgelicht</h1>
+      </div>
+
+      
+
+      <img class="logoHome" src="Achtergrond/nieuwelogo.png">
+        
+                    <nav class="navbar">
+                        <ul>
+                            <li><a href="home.html">HOME</a></li>
+                            <li><a href="info.html">TIPS</a></li>
+                            <li><a href="game.html">GAME</a></li>
+                            <li><a href="social.html">SOCIAL</a></li>
+                            <li><a href="weetjes.html">WEETJES</a></li>
+
+                        </ul>
+                    </nav>
+                    <div class="settings"><img class="settingsfoto" onclick="opensettings()" src="Achtergrond/settings_89381.png"></div>
+                    <div class="username-container">
+                        Welkom, <span id="username-placeholder"></span>!
+                    </div>
+                
+                <div class="settingstab">
+                    <button class="kruisje" onclick="closesettings()">X</button>
+                    <button class="logout-button" id="logout-button">
+                    
+                        <div class="sign"><svg viewBox="0 0 512 512"><path d="M377.9 105.9L500.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L377.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1-128 0c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM160 96L96 96c-17.7 0-32 14.3-32 32l0 256c0 17.7 14.3 32 32 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-64 0c-53 0-96-43-96-96L0 128C0 75 43 32 96 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32z"></path></svg></div>
+                        
+                        <div class="text">Logout</div>  
+                            
+                      </button> 
+                </div>
+
+                
+
+                <div class="quiz-container">
+                    <h1>Test je kennis</h1>
+                    <p id="question">Question goes here</p>
+                    <img class="img2" src="https://i.imgur.com/LpykHhP.png" alt="">
+                    <div id="choices" class="choices-container">
+                        <button class="choice" onclick="checkAnswer(this)">Choice 1</button>
+                        <button class="choice" onclick="checkAnswer(this)">Choice 2</button>
+                        <button class="choice" onclick="checkAnswer(this)">Choice 3</button>
+                        <button class="choice" onclick="checkAnswer(this)">Choice 4</button>
+                    </div>
+                    <p id="score">Score: 0</p>
+                    <button id="try-again-button" onclick="startQuiz()">Probeer opnieuw</button>
+                    <p id="jouwscore"></p>
+                    <p id="welkevraag"></p>
+
+
+
+
+                </div>
+        
+
+    <script src="../app.js"></script>
+    <script>
+       
+       
+ //vragen
+ const questions = [
+ {
+        question: "Wat hoort in de groene bak?",
+        choices: ["Papier", "Plastic", "Glas", "GFT-afval (Groente-, Fruit- en Tuinafval)"],
+        correct: 3
+    },
+    {
+        question: "Waar gooi je glazen flessen en potten in?",
+        choices: ["Plastic bak", "Grijze bak", "Glasbak", "Groene bak"],
+        correct: 2
+    },
+    {
+        question: "Welk afval wordt meestal gerecycled om nieuwe producten te maken?",
+        choices: ["GFT-afval", "Elektronisch afval", "Papier en karton", "Plastic"],
+        correct: 2
+    },
+    {
+        question: "Wat mag niet in de plastic container?",
+        choices: ["Plastic flessen", "Verpakkingsmateriaal", "Piepschuim", "Blikjes"],
+        correct: 2
+    },
+    {
+        question: "Wat moet je doen voordat je een blikje in de prullenbak gooit?",
+        choices: ["Het blikje spoelen", "Het label eraf halen", "Niks, gewoon weggooien", "Het blikje platdrukken"],
+        correct: 3
+    },
+    {
+        question: " In welke bak gooi je oude kranten en tijdschriften?",
+        choices: ["Groene bak", "Grijze bak", "Papierbak", "Plastic bak"],
+        correct: 2
+    },
+    {
+        question: "Wat mag er in de restafvalcontainer?",
+        choices: ["Papier en karton", "Plastic flessen", "Niet-recyclebaar afval", "Groenteafval"],
+        correct: 2
+    },
+    {
+        question: "Wat hoort in de batterijencontainer?",
+        choices: ["Oude kleding", "Gebruikte batterijen", "Glas", "Papier"],
+        correct: 1
+    },
+    {
+        question: "Welk afval kan worden gecomposteerd?",
+        choices: ["Glas", "Plastic", "Papier", "Koffiedik"],
+        correct: 3
+    },
+    {
+        question: "Hoe moet je elektronisch afval zoals oude mobiele telefoons recyclen?",
+        choices: ["Gooi het in de plastic bak", "Breng het naar een elektronica-inzamelpunt", "Gooi het in de glasbak", "Verbrand het in de tuin"],
+        correct: 1
+    },
+    {
+        question: "Welk afval moet worden ingeleverd bij een chemisch afvaldepot?",
+        choices: ["Plastic flessen", "Lege verfblikken", "Groenteafval", "Papier en karton"],
+        correct: 1
+    },
+    {
+        question: "Wat is de beste manier om afval te verminderen?",
+        choices: ["Alles in dezelfde bak gooien", "Hergebruik bevorderen", "Vaker afval weggooien", "Nieuwe producten kopen"],
+        correct: 1
+    },
+    {
+        question: "Wat is het doel van afval scheiden?",
+        choices: ["Het milieu beschermen", "Afval duurder maken", "Afval snel opruimen", "Gemakkelijker afvalverwerking"],
+        correct: 0
+    },
+    {
+        question: "Wat is het gevolg van slecht afvalbeheer?",
+        choices: ["Schone oceanen", "Luchtvervuiling", "Geen recycling", "Gezonde ecosystemen"],
+        correct: 1
+    },
+    {
+        question: "Welke kleur heeft de container voor papier en karton?",
+        choices: ["Groen", "Geel", "Blauw", "Oranje"],
+        correct: 2
+    },
+    {
+        question: "Wat kun je doen met oude kleding die je niet meer wilt dragen?",
+        choices: [" In de prullenbak gooien", " Doneren aan een goed doel", "Recyclen tot nieuwe kleding", "Verbranden"],
+        correct: 1
+    },
+    {
+        question: "Wat is de beste manier om oude elektronica te recyclen?",
+        choices: ["In de vuilnisbak gooien", "Naar een recyclingcentrum brengen", "Verkopen op een rommelmarkt", "In de achtertuin begraven"],
+        correct: 1
+    },
+    {
+        question: "Wat moet je doen met medicijnen die je niet meer gebruikt?",
+        choices: ["Doorspoelen in het toilet", "Terugbrengen naar de apotheek", "In de prullenbak gooien", "In de natuur achterlaten"],
+        correct: 1
+    },
+    {
+        question: "Welk afval moet je in een milieustraat brengen?",
+        choices: ["Papier en karton", "Glas", "Bouwafval", "Groenteafval"],
+        correct: 2
+    },
+    {
+        question: "Wat is de beste manier om afval te verminderen in de keuken?",
+        choices: ["Geen maaltijden koken", "Voedselresten in de prullenbak gooien", "Bewust voedsel kopen en verspillen voorkomen", "Plastic zakken gebruiken voor alles"],
+        correct: 2
+    },
+        ];
+
+        function shuffleArray(array) {
+            const shuffledArray = array.slice();
+            for (let i = shuffledArray.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]];
+            }
+            return shuffledArray;
+        }
+
+        let currentQuestion = 0;
+        let score = 0;
+        const tryAgainButton = document.getElementById("try-again-button");
+
+        let shuffledQuestions = shuffleArray(questions);
+
+        function displayQuestion() {
+            const questionElement = document.getElementById("question");
+            const choicesElement = document.getElementById("choices");
+            const scoreElement = document.getElementById("score");
+            const jouwscore = document.getElementById("jouwscore");
+            jouwscore.textContent = `Jouw score: ${score} van de ${questions.length}`;
+            const welkevraag = document.getElementById("welkevraag");
+            welkevraag.textContent = `Je bent bij vraag: ${currentQuestion + 1} van de ${questions.length}`;
+
+            questionElement.textContent = shuffledQuestions[currentQuestion].question;
+            choicesElement.innerHTML = "";
+
+            shuffledQuestions[currentQuestion].choices.forEach((choice, index) => {
+                const choiceButton = document.createElement("button");
+                choiceButton.textContent = choice;
+                choiceButton.className = "choice";
+                choiceButton.setAttribute("data-index", index);
+                choiceButton.addEventListener("click", checkAnswer);
+                choicesElement.appendChild(choiceButton);
+            });
+
+            scoreElement.textContent = `Score: ${score}`;
+        }
+
+        function checkAnswer() {
+            const selectedChoice = parseInt(this.getAttribute("data-index"));
+
+            if (selectedChoice === shuffledQuestions[currentQuestion].correct) {
+                score++;
+            }
+
+            currentQuestion++;
+
+            if (currentQuestion < questions.length) {
+                displayQuestion();
+            } else {
+                endQuiz();
+            }
+        }
+
+        function shuffleQuestions() {
+            shuffledQuestions = shuffleArray(questions);
+        }
+
+        function startQuiz() {
+            currentQuestion = 0;
+            score = 0;
+            displayQuestion();
+            shuffleQuestions();
+        }
+
+        function endQuiz() {
+            const quizContainer = document.querySelector(".quiz-container");
+
+            const scoreElement = document.createElement("p");
+            quizContainer.appendChild(scoreElement);
+            tryAgainButton.style.display = "block";
+            window.alert("Quiz beëindigd. Je score is: " + score);
+            shuffleQuestions();
+        }
+
+        tryAgainButton.onclick = startQuiz;
+
+        startQuiz();
+
+
+
+
+        function fetchAndDisplayUsername() {
+            fetch("/home")
+                .then((response) => response.json())
+                .then((data) => {
+                    const usernameElement = document.getElementById("username-placeholder");
+                    if (usernameElement) {
+                        if (data.username && data.username !== "") {
+                            usernameElement.textContent = data.username;
+                        } else {
+                           
+                            window.location.href = "/index.html";
+                        }
+                    }
+                })
+                .catch((error) => {
+                    console.error("Error fetching username:", error);
+                   
+                    window.location.href = "/index.html";
+                });
+        }
+
+        fetchAndDisplayUsername();
+
+
+        function logout() {
+            fetch("/logout")
+                .then((response) => {
+                    if (response.redirected) {
+
+                        window.location.href = response.url;
+                    } else {
+
+                        console.error("Logout failed. Response status:", response.status);
+                    }
+                })
+                .catch((error) => {
+                    console.error("Error during logout:", error);
+                });
+        }
+
+
+        const logoutButton = document.getElementById("logout-button");
+        if (logoutButton) {
+            logoutButton.addEventListener("click", logout);
+        }
+
+        var tab = document.querySelector(".settingstab");
+        var closevraagteken = 0;
+
+        function opensettings() {
+            var tab = document.querySelector(".settingstab");
+            tab.classList.add("active");
+        }
+
+        function closesettings() {
+            var tab = document.querySelector(".settingstab");
+            tab.classList.remove("active");
+        }
+            // hai bart
+            function allowDrop(ev) {
+  ev.preventDefault();
+}
+
+function drag(ev) {
+  ev.dataTransfer.setData("text", ev.target.id);
+}
+
+function drop(ev) {
+  ev.preventDefault();
+  var data = ev.dataTransfer.getData("text");
+  var prullenbak = document.getElementById("papier-prullenbak");
+  prullenbak.appendChild(document.getElementById(data));
+}
+
+
+</script>
+
+
+
+
+
+</body>
+</html>

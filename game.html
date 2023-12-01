@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game</title>
+    <script src="title.js"></script>
+    <link rel="stylesheet" href="game.css">
+    <link rel="icon" type="image/x-icon" href="Achtergrond/Lovepik_com-400380195-earth.png">
+</head>
+
+<body>
+    <div class="site">
+        <div class="background">
+            <img class="achtergrond" src="Achtergrond/mileu.png"></img>
+            <div class="foreground">
+                <nav class="navbar">
+                    <ul>
+                        <li><a href="home.html">HOME</a></li>
+                        <li><a href="info.html">TIPS</a></li>
+                        <li><a href="game.html">GAME</a></li>
+                        <li><a href="social.html">SOCIAL</a></li>
+                        <button id="logout-button">Logout</button>
+                    </ul>
+                </nav>
+                        <div class="gamevak">
+                            <div class="gamevak" id="drop-zone">
+                        <img src="Achtergrond/papierprullenbak.png" alt="papier" id="papier-prullenbak">
+                        <!--prullenbak -->
+                        <img src="Achtergrond/vuilnisbak.png" alt="papier" id="vuilnis-rest"> <!--papier -->
+                        <div id="dropvak-recycle" ondrop="checkRecycleCollision()" ondragover="checkRecycleCollision()">
+                        </div>
+                        <div id="dropvak-papier" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                        <!-- Hier kan de afbeelding "papier afval" naartoe worden gesleept -->
+                        <div id="dropvak-rest" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                        <!-- Hier kan de afbeelding "papier afval" naartoe worden gesleept -->
+                        <img src="Achtergrond/groenebak.avif" alt="recycle" id="recycle" on> <!--groenebak-->
+                        <div id="vuilnis-papier" class="vuilnis-papier"></div>
+                        <div class="vuilnis-papier1" draggable="true" contenteditable="false"></div>
+                        <div class="vuilnis-papier2"></div>
+                        <div class="vuilnis-papier3"></div>
+                        <div class="vuilnis-recycle" draggable="true"></div>
+                        <div class="vuilnis-recycle1" draggable="true"></div>
+                        <div class="vuilnis-recycle2" draggable="true"></div>
+                        <div class="vuilnis-recycle3" draggable="true"></div>
+                        <div class="vuilnis-rest" draggable="true"></div>
+                        <div class="vuilnis-rest2" draggable="true"></div>
+                        <div class="vuilnis-rest3" draggable="true"></div>
+                        <div class="vuilnis-rest4" draggable="true"></div>
+                        <h2 id="teller-papier"></h2>
+                        <h2 id="teller-recycle"></h2>
+                        <h2 id="teller-rest"></h2>
+                        <div class="titel-papier"><h1>hoeveel papier:</h1></div>
+                        <div class="titel-rest"><h1>hoeveel rest afval:</h1></div>
+                        <div class="titel-recycle"><h1>hoeveel recycle:</h1></div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+        function fetchAndDisplayUsername() {
+            fetch("/home")
+                .then((response) => response.json())
+                .then((data) => {
+                    const usernameElement = document.getElementById("username-placeholder");
+                    if (usernameElement) {
+                        if (data.username && data.username !== "") {
+                            usernameElement.textContent = data.username;
+                        } else {
+                            // If username is empty or undefined, redirect to index.html
+                            window.location.href = "/index.html";
+                        }
+                    }
+                })
+                .catch((error) => {
+                    console.error("Error fetching username:", error);
+                    // If there's an error, redirect to index.html
+                    window.location.href = "/index.html";
+                });
+        }
+
+        fetchAndDisplayUsername();
+
+        function logout() {
+            fetch("/logout")
+                .then((response) => {
+                    if (response.redirected) {
+
+                        window.location.href = response.url;
+                    } else {
+
+                        console.error("Logout failed. Response status:", response.status);
+                    }
+                })
+                .catch((error) => {
+                    console.error("Error during logout:", error);
+                });
+        }
+
+
+        const logoutButton = document.getElementById("logout-button");
+        if (logoutButton) {
+            logoutButton.addEventListener("click", logout);
+        }
+        
+        // papier 
+        blok = document.querySelector(".vuilnis-papier");
+        blok1 = document.querySelector(".vuilnis-papier1");
+        blok2 = document.querySelector(".vuilnis-papier2");
+        blok3 = document.querySelector(".vuilnis-papier3");
+        // recycle
+        RecycleDrag = document.querySelector(".vuilnis-recycle");
+        RecycleDrag1 = document.querySelector(".vuilnis-recycle1");
+        RecycleDrag2 = document.querySelector(".vuilnis-recycle2");
+        RecycleDrag3 = document.querySelector(".vuilnis-recycle3");
+        // Restafval
+        RestDrag = document.querySelector(".vuilnis-rest");
+        RestDrag1 = document.querySelector(".vuilnis-rest2");
+        RestDrag2 = document.querySelector(".vuilnis-rest3")
+        RestDrag3 = document.querySelector(".vuilnis-rest4");
+        // Recycle drop vak
+        const dropvakRecycle = document.getElementById("dropvak-recycle");
+
+        // papier dropvak
+        const dropvakpapier = document.getElementById("dropvak-papier");
+        // Rest dropvak
+        const dropvakRest = document.getElementById("dropvak-rest");
+        // Tellers voor papier
+        var teller1 = 0; // Teller voor vuilnis-papier
+        var teller2 = 0; // Teller voor vuilnis-papier
+        var teller3 = 0; // Teller voor vuilnis-papier
+        var teller4 = 0; // Teller voor vuilnis-papier
+        var teller5 = 0; // Teller voor vuilnis-papier
+        var tellerMinRecycle = 0;
+        var tellerMinRecycle1 = 0;
+        var tellerMinRecycle2 = 0;
+        var tellerMinRecycle3 = 0;
+        var tellerminRest = 0;
+        var tellerminRest1 = 0;
+        var tellerminRest2 = 0;
+        var tellerminRest3 = 0;
+
+        // min teller voor vuilnis 
+        var tellerMinRecycle = 0;
+        var tellerMinRecycle1 = 0;
+        var tellerMinRecycle2 = 0;
+        var tellerMinRecycle3 = 0;
+        var tellerminRest = 0;
+        var tellerminRest1 = 0;
+        var tellerminRest2 = 0;
+        var tellerminRest3 = 0;
+        var tellerMinBlok = 0; 
+        var tellerMinBlok1 = 0;
+        var tellerMinBlok2 = 0;
+        var tellerMinBlok3 = 0;
+        // Teller voor recycle
+        var teller6 = 0; // Teller voor vuilnis-recycle
+        var teller7 = 0; // Teller voor vuilnis-recycle
+        var teller8 = 0; // Teller voor vuilnis-recycle
+        var teller9 = 0; // Teller voor vuilnis-recycle
+
+        // Teller voor Rest
+        var teller10 = 0; // Teller voor vuilnis-recycle
+        var teller11 = 0; // Teller voor vuilnis-recycle
+        var teller12 = 0; // Teller voor vuilnis-recycle
+        var teller13 = 0; // Teller voor vuilnis-recycle
+        // Teller min
+        var tellerMin;
+        // variables voor papier
+        let isVerschuiven = false;
+        let isVerschuiven1 = false;
+        let isVerschuiven2 = false;
+        let isVerschuiven3 = false;
+
+        // variables voor papier
+        let offsetX, offsetY;
+        let offsetX1, offsetY1; // Nieuwe variabelen voor blok1
+        let offsetX2, offsetY2; // Nieuwe variabelen voor blok2
+        let offsetX3, offsetY3; // Nieuwe variabelen voor blok3
+
+        // Variables voor recycle
+        let isVerschuiven4 = false;
+        let isVerschuiven5 = false;
+        let isVerschuiven6 = false;
+        let isVerschuiven7 = false;
+
+        // Variables voor recycle
+        let offsetX4, offsetY4;
+        let offsetX5, offsetY5;
+        let offsetX6, offsetY6;
+        let offsetX7, offsetY7;
+        // Variables voor rest
+        let isVerschuiven8 = false;
+        let isVerschuiven9 = false;
+        let isVerschuiven10 = false;
+        let isVerschuiven11 = false;
+        // Variables voor rest
+        let offsetX8, offsetY8;
+        let offsetX9, offsetY9;
+        let offsetX10, offsetY10;
+        let offsetX11, offsetY11;
+        // Voeg een event listener toe voor mousedown prop papier
+
+        // Mouse beweging papier
+        blok.addEventListener('mousedown', (e) => {
+            isVerschuiven = true;
+            offsetX = e.clientX - blok.getBoundingClientRect().left;
+            offsetY = e.clientY - blok.getBoundingClientRect().top;
+        });
+
+        // Voeg een event listener toe voor mousedown prop papier1
+        blok1.addEventListener('mousedown', (e) => {
+            isVerschuiven1 = true;
+            offsetX1 = e.clientX - blok1.getBoundingClientRect().left;
+            offsetY1 = e.clientY - blok1.getBoundingClientRect().top;
+        });
+
+        // Voeg een event listener toe voor mousedown prop papier2
+        blok2.addEventListener('mousedown', (e) => {
+            isVerschuiven2 = true;
+            offsetX2 = e.clientX - blok2.getBoundingClientRect().left;
+            offsetY2 = e.clientY - blok2.getBoundingClientRect().top;
+        });
+
+        // Voeg een event listener toe voor mousedown prop papier3
+        blok3.addEventListener('mousedown', (e) => {
+            isVerschuiven3 = true;
+            offsetX3 = e.clientX - blok3.getBoundingClientRect().left;
+            offsetY3 = e.clientY - blok3.getBoundingClientRect().top;
+        });
+
+        // Muis beweging voor recycle
+        RecycleDrag.addEventListener('mousedown', (e) => {
+            isVerschuiven4 = true;
+            offsetX4 = e.clientX - RecycleDrag.getBoundingClientRect().left;
+            offsetY4 = e.clientY - RecycleDrag.getBoundingClientRect().top;
+        })
+
+        RecycleDrag1.addEventListener('mousedown', (e) => {
+            isVerschuiven5 = true;
+            offsetX5 = e.clientX - RecycleDrag1.getBoundingClientRect().left;
+            offsetY5 = e.clientY - RecycleDrag1.getBoundingClientRect().top;
+        });
+        RecycleDrag2.addEventListener('mousedown', (e) => {
+            isVerschuiven6 = true;
+            offsetX6 = e.clientX - RecycleDrag2.getBoundingClientRect().left;
+            offsetY6 = e.clientY - RecycleDrag2.getBoundingClientRect().top;
+        });
+
+        RecycleDrag3.addEventListener('mousedown', (e) => {
+            isVerschuiven7 = true;
+            offsetX7 = e.clientX - RecycleDrag3.getBoundingClientRect().left;
+            offsetY7 = e.clientY - RecycleDrag3.getBoundingClientRect().top;
+        });
+
+        RestDrag.addEventListener('mousedown', (e) => {
+            console.log("🦤🦤🦤🦤🦤🦤🦤")
+            isVerschuiven8 = true;
+            offsetX8 = e.clientX - RestDrag.getBoundingClientRect().left;
+            offsetY8 = e.clientY - RestDrag.getBoundingClientRect().top;
+        });
+
+        RestDrag1.addEventListener('mousedown', (e) => {
+            isVerschuiven9 = true;
+            offsetX9 = e.clientX - RestDrag1.getBoundingClientRect().left;
+            offsetY9 = e.clientY - RestDrag1.getBoundingClientRect().top;
+        });
+
+        RestDrag2.addEventListener('mousedown', (e) => {
+            isVerschuiven10 = true;
+            offsetX10 = e.clientX - RestDrag2.getBoundingClientRect().left;
+            offsetY10 = e.clientY - RestDrag2.getBoundingClientRect().top;
+        })
+        RestDrag3.addEventListener('mousedown', (e) => {
+            isVerschuiven11 = true;
+            offsetX11 = e.clientX - RestDrag3.getBoundingClientRect().left;
+            offsetY11 = e.clientY - RestDrag3.getBoundingClientRect().top;
+        });
+
+        // Voeg een event listener toe voor mouseup
+        document.addEventListener('mouseup', () => {
+            isVerschuiven = false;
+            isVerschuiven1 = false;
+            isVerschuiven2 = false;
+            isVerschuiven3 = false;
+            isVerschuiven4 = false;
+            isVerschuiven5 = false;
+            isVerschuiven6 = false;
+            isVerschuiven7 = false;
+            isVerschuiven8 = false;
+            isVerschuiven9 = false;
+            isVerschuiven10 = false;
+            isVerschuiven11 = false;
+        });
+
+        // Voeg een event listener toe voor mousemove
+        document.addEventListener('mousemove', (e) => {
+
+
+
+            if (isVerschuiven) {
+                const nieuweX = e.clientX - offsetX;
+                const nieuweY = e.clientY - offsetY;
+
+                blok.style.left = nieuweX + 'px';
+                blok.style.top = nieuweY + 'px';
+            }
+
+            if (isVerschuiven1) {
+                const nieuweX1 = e.clientX - offsetX1;
+                const nieuweY1 = e.clientY - offsetY1;
+
+                blok1.style.left = nieuweX1 + 'px';
+                blok1.style.top = nieuweY1 + 'px';
+            }
+
+            if (isVerschuiven2) {
+                const nieuweX2 = e.clientX - offsetX2;
+                const nieuweY2 = e.clientY - offsetY2;
+
+                blok2.style.left = nieuweX2 + 'px';
+                blok2.style.top = nieuweY2 + 'px';
+            }
+
+            if (isVerschuiven3) {
+                const nieuweX3 = e.clientX - offsetX3;
+                const nieuweY3 = e.clientY - offsetY3;
+
+                blok3.style.left = nieuweX3 + 'px';
+                blok3.style.top = nieuweY3 + 'px';
+            }
+            if (isVerschuiven4) {
+                const nieuweX4 = e.clientX - offsetX4;
+                const nieuweY4 = e.clientY - offsetY4;
+
+                RecycleDrag.style.left = nieuweX4 + 'px';
+                RecycleDrag.style.top = nieuweY4 + 'px';
+            }
+
+            if (isVerschuiven5) {
+                const nieuweX5 = e.clientX - offsetX5;
+                const nieuweY5 = e.clientY - offsetY5;
+
+                RecycleDrag1.style.left = nieuweX5 + 'px';
+                RecycleDrag1.style.top = nieuweY5 + 'px';
+            }
+
+            if (isVerschuiven6) {
+
+                const nieuweX6 = e.clientX - offsetX6;
+                const nieuweY6 = e.clientY - offsetY6;
+
+                RecycleDrag2.style.left = nieuweX6 + 'px';
+                RecycleDrag2.style.top = nieuweY6 + 'px';
+            }
+
+            if (isVerschuiven7) {
+                const nieuweX7 = e.clientX - offsetX7;
+                const nieuweY7 = e.clientY - offsetY7;
+
+                RecycleDrag3.style.left = nieuweX7 + 'px';
+                RecycleDrag3.style.top = nieuweY7 + 'px';
+            }
+            if (isVerschuiven8) {
+                const nieuweX8 = e.clientX - offsetX8;
+                const nieuweY8 = e.clientY - offsetY8;
+                    
+                RestDrag.style.left = nieuweX8 + 'px';
+                RestDrag.style.top = nieuweY8 + 'px';
+            }
+            if (isVerschuiven9) {
+                const nieuweX9 = e.clientX - offsetX9;
+                const nieuweY9 = e.clientY - offsetY9;
+                
+                RestDrag1.style.left = nieuweX9 + 'px';
+                RestDrag1.style.top = nieuweY9 + 'px';
+            }
+            if (isVerschuiven10) {
+                const nieuweX10 = e.clientX - offsetX10;
+                const nieuweY10 = e.clientY - offsetY10;
+
+                RestDrag2.style.left = nieuweX10 + 'px';
+                RestDrag2.style.top = nieuweY10 + 'px';
+            }
+            if (isVerschuiven11) {
+                const nieuweX11 = e.clientX - offsetX11;
+                const nieuweY11 = e.clientY - offsetY11;
+
+                RestDrag3.style.left = nieuweX11 + 'px';
+                RestDrag3.style.top = nieuweY11 + 'px';
+            }
+        });
+        // Voeg een nieuwe variabele toe om bij te houden of alles is weggesleept
+        let allesWeggesleept = false;
+
+        // Functie om te controleren of alles is weggesleept en het extra scherm te openen
+        function openExtraScherm() {
+            if (teller1 === 0 && teller2 === 0 && teller3 === 0 && teller4 === 0 && teller5 === 0 &&
+                teller6 === 0 && teller7 === 0 && teller8 === 0 && teller9 === 0 &&
+                teller10 === 0 && teller11 === 0 && teller12 === 0 && teller13 === 0 &&
+                tellerMinRecycle === 0 && tellerMinRecycle1 === 0 && tellerMinRecycle2 === 0 && tellerMinRecycle3 === 0 &&
+                tellerMinBlok === 0 && tellerMinBlok1 === 0 && tellerMinBlok2 === 0 && tellerMinBlok3 === 0 &&
+                tellerminRest === 0 && tellerminRest1 === 0 && tellerminRest2 === 0 && tellerminRest3 === 0) {
+                // Open hier je extra scherm
+                console.log("Alle elementen zijn weggesleept open het extra scherm.");
+                allesWeggesleept = true;
+            }
+        }
+
+        function checkCollision() {
+            var rect1 = blok.getBoundingClientRect();
+            var rect2_1 = dropvakpapier.getBoundingClientRect();
+            if (rect1.left < rect2_1.right && rect1.right > rect2_1.left &&
+                rect1.top < rect2_1.bottom && rect1.bottom > rect2_1.top) {
+                blok.style.display = "none";
+                teller1 += 1;
+            }
+
+            var rect1_1 = blok1.getBoundingClientRect();
+            if (rect1_1.left < rect2_1.right && rect1_1.right > rect2_1.left &&
+                rect1_1.top < rect2_1.bottom && rect1_1.bottom > rect2_1.top) {
+                blok1.style.display = "none";
+                teller2 += 1;
+            }
+
+            var rect1_2 = blok2.getBoundingClientRect();
+            if (rect1_2.left < rect2_1.right && rect1_2.right > rect2_1.left &&
+                rect1_2.top < rect2_1.bottom && rect1_2.bottom > rect2_1.top) {
+                blok2.style.display = "none";
+                teller3 += 1; 
+            }
+
+            var rect1_3 = blok3.getBoundingClientRect();
+            if (rect1_3.left < rect2_1.right && rect1_3.right > rect2_1.left &&
+                rect1_3.top < rect2_1.bottom && rect1_3.bottom > rect2_1.top) {
+                blok3.style.display = "none";
+                teller4 += 1;
+
+            }
+
+            var rect1_4 = RecycleDrag.getBoundingClientRect();
+            if (rect1_4.left < rect2_1.right && rect1_4.right > rect2_1.left &&
+                rect1_4.top < rect2_1.bottom && rect1_4.bottom > rect2_1.top) {
+                RecycleDrag.style.display = "none";
+                tellerMinRecycle -= 1;
+            }
+
+            var rect1_5 = RecycleDrag1.getBoundingClientRect();
+            if (rect1_5.left < rect2_1.right && rect1_5.right > rect2_1.left &&
+                rect1_5.top < rect2_1.bottom && rect1_5.bottom > rect2_1.top) {
+                RecycleDrag1.style.display = "none";
+                tellerMinRecycle1 -= 1;
+            }
+            
+            var rect1_6 = RecycleDrag2.getBoundingClientRect();
+            if (rect1_6.left < rect2_1.right && rect1_6.right > rect2_1.left &&
+                rect1_6.top < rect2_1.bottom && rect1_6.bottom > rect2_1.top) {
+                RecycleDrag2.style.display = "none";
+                tellerMinRecycle2 -= 1;
+            }
+
+            var rect1_7 = RecycleDrag3.getBoundingClientRect();
+            if (rect1_7.left < rect2_1.right && rect1_7.right > rect2_1.left &&
+                rect1_7.top < rect2_1.bottom && rect1_7.bottom > rect2_1.top) {
+                RecycleDrag3.style.display = "none";
+                tellerMinRecycle3 -= 1;
+            }
+
+            var rect1_8 = RestDrag.getBoundingClientRect();
+            if (rect1_8.left < rect2_1.right && rect1_8.right > rect2_1.left &&
+                rect1_8.top < rect2_1.bottom && rect1_8.bottom > rect2_1.top) {
+                RestDrag.style.display = "none";
+                tellerminRest -= 1;
+            }
+
+            var rect1_9 = RestDrag1.getBoundingClientRect();
+            if (rect1_9.left < rect2_1.right && rect1_9.right > rect2_1.left &&
+                rect1_9.top < rect2_1.bottom && rect1_9.bottom > rect2_1.top) {
+                RestDrag1.style.display = "none";
+                tellerminRest1 -= 1;
+            }
+
+            var rect2 = RestDrag2.getBoundingClientRect();
+            if (rect2.left < rect2_1.right && rect2.right > rect2_1.left &&
+                rect2.top < rect2_1.bottom && rect2.bottom > rect2_1.top) {
+                RestDrag2.style.display = "none";
+                tellerminRest2 -= 1;
+            }
+
+            var rectLast = RestDrag3.getBoundingClientRect();
+            if (rectLast.left < rect2_1.right && rectLast.right > rect2_1.left &&
+                rectLast.top < rect2_1.bottom && rectLast.bottom > rect2_1.top) {
+                RestDrag3.style.display = "none";
+                tellerminRest3 -= 1;
+            }
+
+            let PointTotalPapier = teller1 + teller2 + teller4 + teller3 + teller5  + tellerMinRecycle + tellerMinRecycle1 + tellerMinRecycle2 + tellerMinRecycle3 + tellerminRest + tellerminRest1 + tellerminRest2 + tellerminRest3; 
+            document.getElementById('teller-papier').innerHTML = PointTotalPapier;
+
+            openExtraScherm();
+        }
+
+        setInterval(checkCollision, 100);
+        function checkRecycleCollision() {
+            var rect1 = RecycleDrag.getBoundingClientRect();
+            var rect2 = dropvakRecycle.getBoundingClientRect();
+            if (rect1.left < rect2.right && rect1.right > rect2.left &&
+                rect1.top < rect2.bottom && rect1.bottom > rect2.top) {
+                RecycleDrag.style.display = "none";
+                teller6 += 1;
+            }
+
+            var rect1_1 = RecycleDrag1.getBoundingClientRect();
+            if (rect1_1.left < rect2.right && rect1_1.right > rect2.left &&
+                rect1_1.top < rect2.bottom && rect1_1.bottom > rect2.top) {
+                RecycleDrag1.style.display = "none";
+                teller7 += 1;
+            }
+
+            var rect1_2 = RecycleDrag2.getBoundingClientRect();
+            if (rect1_2.left < rect2.right && rect1_2.right > rect2.left &&
+                rect1_2.top < rect2.bottom && rect1_2.bottom > rect2.top) {
+                RecycleDrag2.style.display = "none";
+                teller8 += 1;
+            }
+
+            var rect1_3 = RecycleDrag3.getBoundingClientRect();
+            if (rect1_3.left < rect2.right && rect1_3.right > rect2.left &&
+                rect1_3.top < rect2.bottom && rect1_3.bottom > rect2.top) {
+                RecycleDrag3.style.display = "none";
+                teller9 += 1;
+            }
+            
+            var rect1_5 = blok.getBoundingClientRect();
+            if (rect1_5.left < rect2.right && rect1_5.right > rect2.left &&
+                rect1_5.top < rect2.bottom && rect1_5.bottom > rect2.top) {
+                blok.style.display = "none";
+                tellerMinBlok -= 1;
+            }
+
+            var rect1_6 = blok1.getBoundingClientRect();
+            if (rect1_6.left < rect2.right && rect1_6.right > rect2.left &&
+                rect1_6.top < rect2.bottom && rect1_6.bottom > rect2.top) {
+                blok1.style.display = "none";
+                tellerMinBlok1 -= 1;
+            }
+
+            var rect1_7 = blok2.getBoundingClientRect();
+            if (rect1_7.left < rect2.right && rect1_7.right > rect2.left &&
+                rect1_7.top < rect2.bottom && rect1_7.bottom > rect2.top) {
+                blok2.style.display = "none";
+                tellerMinBlok2 -= 1;
+            }
+
+            var rect1_8 = blok3.getBoundingClientRect();
+            if (rect1_8.left < rect2.right && rect1_8.right > rect2.left &&
+                rect1_8.top < rect2.bottom && rect1_8.bottom > rect2.top) {
+                blok3.style.display = "none";
+                tellerMinBlok3 -= 1;
+            }
+
+            var rect1_9 = RestDrag.getBoundingClientRect();
+            if (rect1_9.left < rect2.right && rect1_9.right > rect2.left &&
+                rect1_9.top < rect2.bottom && rect1_9.bottom > rect2.top) {
+                RestDrag.style.display = "none";
+                tellerminRest -= 1;
+            }
+
+            var rectRest = RestDrag1.getBoundingClientRect();
+            if (rectRest.left < rect2.right && rectRest.right > rect2.left &&
+                rectRest.top < rect2.bottom && rectRest.bottom > rect2.top) {
+                RestDrag1.style.display = "none";
+                tellerminRest1 -= 1;
+            }
+
+            var rect2_1 = RestDrag2.getBoundingClientRect();
+            if (rect2_1.left < rect2.right && rect2_1.right > rect2.left &&
+                rect2_1.top < rect2.bottom && rect2_1.bottom > rect2.top) {
+                RestDrag2.style.display = "none";
+                tellerminRest2 -= 1;
+            }
+
+            var rect2_2 = RestDrag3.getBoundingClientRect();
+            if (rect2_2.left < rect2.right && rect2_2.right > rect2.left &&
+                rect2_2.top < rect2.bottom && rect2_2.bottom > rect2.top) {
+                RestDrag3.style.display = "none";
+                tellerminRest3 -= 1;
+            }
+
+            
+            let PointTotalRecycle = teller6 + teller7 + teller8 + teller9 + tellerMinBlok + tellerMinBlok1 + tellerMinBlok2 + tellerMinBlok3 + tellerminRest + tellerminRest1 + tellerminRest2 + tellerminRest3;
+            document.getElementById('teller-recycle').innerHTML = PointTotalRecycle;
+            openExtraScherm();
+
+        }
+
+        setInterval(checkRecycleCollision, 100);
+
+        //Rest
+        function checkRestCollision() {
+            var rect1 = RestDrag.getBoundingClientRect();
+            var rect2 = dropvakRest.getBoundingClientRect();
+            if (rect1.left < rect2.right && rect1.right > rect2.left &&
+                rect1.top < rect2.bottom && rect1.bottom > rect2.top) {
+                RestDrag.style.display = "none";
+                teller10 += 1;
+            }
+
+            var rect1_1 = RestDrag1.getBoundingClientRect();
+            if (rect1_1.left < rect2.right && rect1_1.right > rect2.left &&
+                rect1_1.top < rect2.bottom && rect1_1.bottom > rect2.top) {
+                RestDrag1.style.display = "none";
+                teller11 += 1;
+            }
+
+            var rect1_2 = RestDrag2.getBoundingClientRect();
+            if (rect1_2.left < rect2.right && rect1_2.right > rect2.left &&
+                rect1_2.top < rect2.bottom && rect1_2.bottom > rect2.top) {
+                RestDrag2.style.display = "none";
+                teller12 += 1;
+            }
+
+            var rect1_3 = RestDrag3.getBoundingClientRect();
+            if (rect1_3.left < rect2.right && rect1_3.right > rect2.left &&
+                rect1_3.top < rect2.bottom && rect1_3.bottom > rect2.top) {
+                RestDrag3.style.display = "none";
+                teller13 += 1;
+            }
+
+            var rect1_3 = RestDrag3.getBoundingClientRect();
+            if (rect1_3.left < rect2.right && rect1_3.right > rect2.left &&
+                rect1_3.top < rect2.bottom && rect1_3.bottom > rect2.top) {
+                RestDrag3.style.display = "none";
+                teller13 += 1;
+            }
+
+            var rect1_4 = blok.getBoundingClientRect();
+            if (rect1_4.left < rect2.right && rect1_4.right > rect2.left &&
+                rect1_4.top < rect2.bottom && rect1_4.bottom > rect2.top) {
+                blok.style.display = "none";
+                tellerMinBlok -= 1;
+            }
+
+            var rect1_5 = blok1.getBoundingClientRect();
+            if (rect1_5.left < rect2.right && rect1_5.right > rect2.left &&
+                rect1_5.top < rect2.bottom && rect1_5.bottom > rect2.top) {
+                blok1.style.display = "none";
+                tellerMinBlok1 -= 1;
+            }
+
+            var rect1_6 = blok2.getBoundingClientRect();
+            if (rect1_6.left < rect2.right && rect1_6.right > rect2.left &&
+                rect1_6.top < rect2.bottom && rect1_6.bottom > rect2.top) {
+                blok2.style.display = "none";
+                tellerMinBlok2 -= 1;
+            }
+
+            var rect1_7 = blok3.getBoundingClientRect();
+            if (rect1_7.left < rect2.right && rect1_7.right > rect2.left &&
+                rect1_7.top < rect2.bottom && rect1_7.bottom > rect2.top) {
+                blok3.style.display = "none";
+                tellerMinBlok3 -= 1;
+            }
+
+            var rect1_8 = RecycleDrag.getBoundingClientRect();
+            if (rect1_8.left < rect2.right && rect1_8.right > rect2.left &&
+                rect1_8.top < rect2.bottom && rect1_8.bottom > rect2.top) {
+                RecycleDrag.style.display = "none";
+                tellerMinRecycle -= 1;
+            }
+
+            var rect1_9 = RecycleDrag1.getBoundingClientRect();
+            if (rect1_9.left < rect2.right && rect1_9.right > rect2.left &&
+                rect1_9.top < rect2.bottom && rect1_9.bottom > rect2.top) {
+                RecycleDrag1.style.display = "none";
+                tellerMinRecycle1 -= 1;
+            }
+
+            var rect2_1 = RecycleDrag2.getBoundingClientRect();
+            if (rect2_1.left < rect2.right && rect2_1.right > rect2.left &&
+                rect2_1.top < rect2.bottom && rect2_1.bottom > rect2.top) {
+                RecycleDrag2.style.display = "none";
+                tellerMinRecycle2 -= 1;
+            }
+
+            var rect2_2 = RecycleDrag3.getBoundingClientRect();
+            if (rect2_2.left < rect2.right && rect2_2.right > rect2.left &&
+                rect2_2.top < rect2.bottom && rect2_2.bottom > rect2.top) {
+                RecycleDrag3.style.display = "none";
+                tellerMinRecycle3 -= 1;
+            }
+
+
+            // Bereken het totale aantal restafvalcorrecties
+            let PointTotalRest = teller10 + teller11 + teller12 + teller13 + tellerMinRecycle + tellerMinRecycle1 + tellerMinRecycle2 + tellerMinRecycle3 + tellerMinBlok + tellerMinBlok1 + tellerMinBlok2 + tellerMinBlok3;
+            document.getElementById('teller-rest').innerHTML = PointTotalRest;
+            openExtraScherm();
+
+        }
+
+        setInterval(checkRestCollision, 100);
+
+        let extraSchermGeopend = false;
+
+        function openExtraScherm() {
+            if (allesWeggesleept && extraSchermGeopend) {
+                console.log("Open het extra scherm.");
+                extraSchermGeopend = true;
+            }
+        }
+
+        setInterval(openExtraScherm, 1000); 
+       
+    </script>
+
+</body>
+
+</html>

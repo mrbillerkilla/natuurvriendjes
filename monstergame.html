@@ -1,0 +1,2545 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            font-family: "ＭＳ Ｐゴシック";
+        }
+
+        canvas {
+            background: rgb(122 199 85);
+
+            position: fixed;
+            width: 100vw;
+            height: 100vh;
+            left: 0;
+            top: 0;
+            image-rendering: pixelated;
+            display: block;
+
+        }
+
+        .spelernaam {
+            image-rendering: pixelated;
+            font-size: 3vh;
+            position: absolute;
+            left: 50%;
+            color: aqua;
+            top: 40%;
+            transform: translate(-50%, -50%);
+            -webkit-font-smoothing: none;
+
+        }
+        .Start{
+            position: fixed;
+            left: 50%;
+            top: 30%;
+            transform: translate(-50%,-50%);
+            cursor: pointer;
+            font-size: 15vh;
+            color: white;
+            font-weight: bold;
+            -webkit-font-smoothing: none;
+        }
+        .beginscherm{
+            width: 100vw;
+            height: 100vh;
+            position: fixed;
+            background: rgb(34, 255, 0);
+            background-image: url(Achtergrond/achtergrondgifgame.gif);
+            background-size: auto;
+            left: 0;
+            top: 0;
+            color: white;
+
+        }
+        .fotologo{
+            position: fixed;
+            top: 10%;
+            left: 50%;
+            transform: translate(-50%,-50%);
+            height: 20vh;
+        }
+        
+        .background-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .transition{
+            position: fixed;
+            top: 0;
+            left: 100%;
+            width: 100vw;
+            height: 100vh;
+            z-index: 99;
+            background: black;
+            
+        }
+
+        .animatie{
+            animation-name: naarlinks;
+            animation-duration: 3.5s;   
+        }
+
+
+        @keyframes naarlinks{
+            0%{
+                position: fixed;
+                top: 0;
+                left: 100%;
+                width: 100vw;
+                height: 100vh;
+                z-index: 99;
+                background: black;  
+            }
+            100%{
+                position: fixed;
+                top: 0;
+                left: -100%;
+                width: 100vw;
+                height: 100vh;
+                z-index: 99;
+                background: black;  
+            }
+        }
+
+        .introductie{
+            position: fixed;
+            left: 50%;
+            top: 38%;
+            transform: translate(-50%,-50%);
+            padding-left: 5px;
+        }
+        .backgroundtekst{
+            width: 80%;
+            height: 20%;
+            position: fixed;
+            background: rgb(100, 99, 99);
+            left: 50%;
+            top: 85%;
+            transform: translate(-50%,-50%);
+            border-radius: 3vh;
+            border: 0.3vh solid black;
+            display: none;
+        }
+        .knopvoorvolgende{
+            height: 5vh;
+            width: 5vw;
+            transform: translate(-50%,-50%);
+            background: none;
+            color: white;
+            transition: 0.5s;
+            left: 95%;
+            top: 85%;
+            position: fixed;
+            font-size: 5vh;
+            line-height: 1%;
+            border: none;
+        }
+        .knopvoorvolgende:hover{
+            cursor: pointer;
+          
+        }
+        .map{
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%,-50%);
+            height: 50vh;
+            width: 50vw;
+            background: red;
+            display: none;
+        }
+        .fotomeisje{
+            position: fixed;
+            height: 17vh;
+            width: 7.5vw;
+            left: 57%;
+            top: 52.5%;
+            transform: translate(-50%,-50%);
+            user-select: none;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="canvas"></canvas>
+    <!-- <p class="spelernaam">This is pixelated text.</p> -->
+    <!-- <div class="transition"></div>
+    <div class="beginscherm">
+        <img src="Achtergrond/achtergrondgifgame.gif" alt="Background Image" class="background-image">
+        <img class="Startfoto" src="Achtergrond/startbutton.jpg">
+        <h1 class="Start" onclick="startSpel()">Start</h1>
+    </div> -->
+    <div class="backgroundtekst">
+        <h1 class="introductie"></h1>
+        <button class="knopvoorvolgende" onclick="volgendetekst()">-></button>
+    </div>
+    <div class="map"></div>
+    <!-- <img class="fotomeisje" src="gamefotos/fotochick.png"> -->
+</body>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    var npcmeisje1 = document.querySelector('.fotomeisje');
+    
+    // $(document).ready(function() {
+    // $('.fotomeisje').on('contextmenu', function(e) {
+    //   e.preventDefault();
+    // });
+    // });
+
+    // $(document).ready(function() {
+    // $('#canvas').on('contextmenu', function(e) {
+    //   e.preventDefault();
+    // });
+    // });
+
+
+    var knopvoorvolgende = document.querySelector('.knopvoorvolgende');
+
+    knopvoorvolgende.innerHTML += '';
+    var knipper = true
+
+    setInterval(function(){
+        if(knipper){
+            knopvoorvolgende.innerHTML = '';
+            knipper = false;
+        }
+        else{
+            knopvoorvolgende.innerHTML = '->';
+            knipper = true;
+        }
+    }, 400)
+
+    var achtergrondvoortekstnpc = document.querySelector('.backgroundtekst');
+    var tekstvoornpc = document.querySelector('.introductie');
+
+
+
+    var beginscherm = document.querySelector('.beginscherm');
+    var spelgestart = false;
+
+
+    // var spelernaam = document.querySelector('.spelernaam');
+
+
+    // var Spelernaamkiezen = prompt('kies een naam:');
+
+    // spelernaam.innerHTML = Spelernaamkiezen;
+
+    var transition = document.querySelector('.transition');
+
+
+
+
+
+   
+
+
+
+
+
+    var canvas = document.getElementById("canvas");
+    var ctx = canvas.getContext("2d");
+
+
+    var map = document.querySelector('.map');
+    
+
+
+
+
+
+
+
+
+    // Pas de positie van de speler aan
+    var player = {
+        x: canvas.width / 2 - 50, // Gecorrigeerde positie om de speler in het midden te plaatsen
+        y: canvas.height / 2 - 50, // Gecorrigeerde positie om de speler in het midden te plaatsen
+        width: 10, // Aangepaste breedte
+        height: 10, // Aangepaste hoogte
+        color: "#edbc84",
+    };
+
+    var keyState = {};
+
+    var vuilnis = {
+        x: 90,
+        y: 10,
+        width: 10,
+        height: 8,
+        color: '#e60b21',
+    };
+
+    
+    var vuilnisActive = false;
+    var vuilnisLife = true;
+
+    function drawVuilnis(obj) {
+        ctx.fillStyle = vuilnis.color;
+        ctx.fillRect(obj.x, obj.y, obj.width, obj.height);
+
+
+        //zwart rand
+        ctx.fillStyle = 'black';
+        ctx.fillRect(obj.x + 5, obj.y + 8, 1,1);
+        ctx.fillStyle = 'black';
+        ctx.fillRect(obj.x + 4, obj.y + 9, 1,1);
+        ctx.fillStyle = 'black';
+        ctx.fillRect(obj.x + 3, obj.y + 9, 1,1);
+        ctx.fillStyle = 'black';
+        ctx.fillRect(obj.x + 2, obj.y + 9, 1,1);
+        ctx.fillStyle = 'black';
+        ctx.fillRect(obj.x + 1, obj.y + 8, 1,1);
+        ctx.fillStyle = 'black';
+        ctx.fillRect(obj.x + 1, obj.y + 7, 1,1);
+        ctx.fillStyle = 'black';
+        ctx.fillRect(obj.x + 0, obj.y + 7, 1,1);
+        ctx.fillStyle = 'black';
+        ctx.fillRect(obj.x + -1, obj.y + 6, 1,1);
+        ctx.fillStyle = 'black';
+        ctx.fillRect(obj.x + -2, obj.y + 5, 1,1);
+        ctx.fillStyle = 'black';
+        ctx.fillRect(obj.x + -3, obj.y + 5, 1,1);
+        ctx.fillStyle = 'black';
+        ctx.fillRect(obj.x + -4, obj.y + 4, 1,1);
+        ctx.fillStyle = 'black';
+        ctx.fillRect(obj.x + -3, obj.y + 3, 1,1);
+        ctx.fillStyle = 'black';
+        ctx.fillRect(obj.x + -2, obj.y + 3, 1,1);
+        ctx.fillStyle = 'black';
+        ctx.fillRect(obj.x + -1, obj.y + 3, 1,1);
+        ctx.fillStyle = 'black';
+        ctx.fillRect(obj.x + -1, obj.y + 4, 1,1);
+        ctx.fillStyle = 'black';
+        ctx.fillRect(obj.x + 0, obj.y + 5, 1,1);
+        ctx.fillStyle = 'black';
+        ctx.fillRect(obj.x + 1, obj.y + 5, 1,1);
+        ctx.fillStyle = 'black';
+        ctx.fillRect(obj.x + 2, obj.y + 4, 1,1);
+        ctx.fillStyle = 'black';
+        ctx.fillRect(obj.x + 3, obj.y + 5, 1,1);
+        ctx.fillStyle = 'black';
+        ctx.fillRect(obj.x + 2, obj.y + 6, 1,1);
+        ctx.fillStyle = 'black';
+        ctx.fillRect(obj.x + -1, obj.y + 2, 1,1);
+        ctx.fillStyle = 'black';
+        ctx.fillRect(obj.x + -1, obj.y + 1, 1,1);
+        ctx.fillStyle = 'black';
+        ctx.fillRect(obj.x + 0, obj.y + 0, 1,1);
+        ctx.fillStyle = 'black';
+        ctx.fillRect(obj.x + -1, obj.y + -1, 1,1);
+        ctx.fillStyle = 'black';
+        ctx.fillRect(obj.x + -2, obj.y + -1, 1,1);
+        ctx.fillStyle = 'black';
+        ctx.fillRect(obj.x + 0, obj.y + -2, 1,1);
+        ctx.fillStyle = 'black';
+        ctx.fillRect(obj.x + 1, obj.y + -3, 1,1);
+        ctx.fillStyle = 'black';
+        ctx.fillRect(obj.x + 2, obj.y + -4, 1,1);
+        ctx.fillStyle = 'black';
+        ctx.fillRect(obj.x + 3, obj.y + -4, 1,1);
+        ctx.fillStyle = 'black';
+        ctx.fillRect(obj.x + 4, obj.y + -4, 1,1);
+        //
+        ctx.fillStyle = 'black';
+        ctx.fillRect(obj.x + 5, obj.y + -3, 1,1);
+        ctx.fillStyle = 'black';
+        ctx.fillRect(obj.x + 4, obj.y + -2, 1,1);
+        ctx.fillStyle = 'black';
+        ctx.fillRect(obj.x + 3, obj.y + -1, 1,1);
+        ctx.fillStyle = 'black';
+        ctx.fillRect(obj.x + 2, obj.y + 0, 1,1);
+        ctx.fillStyle = 'black';
+        ctx.fillRect(obj.x + 1, obj.y + 0, 1,1);
+        ctx.fillStyle = 'black';
+        ctx.fillRect(obj.x + 5, obj.y + -1, 1,1);
+        ctx.fillStyle = 'black';
+        ctx.fillRect(obj.x + 6, obj.y + 0, 1,1);
+        ctx.fillStyle = 'black';
+        ctx.fillRect(obj.x + 6, obj.y + -3, 1,1);
+        ctx.fillStyle = 'black';
+        ctx.fillRect(obj.x + 7, obj.y + -4, 1,1);
+        ctx.fillStyle = 'black';
+        ctx.fillRect(obj.x + 7, obj.y + -5, 1,1);
+
+        ctx.fillStyle = 'black';
+        ctx.fillRect(obj.x + 6, obj.y + -2, 1,1);
+        ctx.fillStyle = 'black';
+        ctx.fillRect(obj.x + 7, obj.y + -2, 1,1);
+        ctx.fillStyle = 'black';
+        ctx.fillRect(obj.x + 8, obj.y + -2, 1,1);
+        ctx.fillStyle = 'black';
+        ctx.fillRect(obj.x + 9, obj.y + -1, 1,1);
+        ctx.fillStyle = 'black';
+        ctx.fillRect(obj.x + 10, obj.y + 0, 1,1);
+        ctx.fillStyle = 'black';
+        ctx.fillRect(obj.x + 11, obj.y + 1, 1,1);
+        ctx.fillStyle = 'black';
+        ctx.fillRect(obj.x + 11, obj.y + 2, 1,1);
+        ctx.fillStyle = 'black';
+        ctx.fillRect(obj.x + 11, obj.y + 3, 1,1);
+        ctx.fillStyle = 'black';
+        ctx.fillRect(obj.x + 11, obj.y + 4, 1,1);
+        ctx.fillStyle = 'black';
+        ctx.fillRect(obj.x + 10, obj.y + 5, 1,1);
+        ctx.fillStyle = 'black';
+        ctx.fillRect(obj.x + 10, obj.y + 6, 1,1);
+        ctx.fillStyle = 'black';
+        ctx.fillRect(obj.x + 9, obj.y + 7, 1,1);
+        ctx.fillStyle = 'black';
+        ctx.fillRect(obj.x + 9, obj.y + 8, 1,1);
+        ctx.fillStyle = 'black';
+        ctx.fillRect(obj.x + 8, obj.y + 9, 1,1);
+        ctx.fillStyle = 'black';
+        ctx.fillRect(obj.x + 7, obj.y + 9, 1,1);
+        ctx.fillStyle = 'black';
+        ctx.fillRect(obj.x + 6, obj.y + 9, 1,1);
+
+        
+
+
+      
+
+
+        //paars donker
+        ctx.fillStyle = '#91233c';
+        ctx.fillRect(obj.x + 4, obj.y + -1, 1,1);
+        ctx.fillStyle = '#91233c';
+        ctx.fillRect(obj.x + 0, obj.y + 2, 1,1);
+        ctx.fillStyle = '#91233c';
+        ctx.fillRect(obj.x + 2, obj.y + 8, 1,1);
+        ctx.fillStyle = '#91233c';
+        ctx.fillRect(obj.x + 3, obj.y + 8, 1,1);
+        ctx.fillStyle = '#91233c';
+        ctx.fillRect(obj.x + 6, obj.y + 8, 1,1);
+
+        //paars licht
+        ctx.fillStyle = '#9f3b57';
+        ctx.fillRect(obj.x + 0, obj.y + 3, 1,1);
+        ctx.fillStyle = '#9f3b57';
+        ctx.fillRect(obj.x + 0, obj.y + 4, 1,1);
+        ctx.fillStyle = '#9f3b57';
+        ctx.fillRect(obj.x + 2, obj.y + 7, 1,1);
+
+        
+        //donker rood
+        ctx.fillStyle = '#820e21';
+        ctx.fillRect(obj.x, obj.y + 1, 1,1);
+        ctx.fillStyle = '#820e21';
+        ctx.fillRect(obj.x + 1, obj.y + 2, 1,1);
+        ctx.fillStyle = '#820e21';
+        ctx.fillRect(obj.x + 1, obj.y + 3, 1,1);
+        ctx.fillStyle = '#820e21';
+        ctx.fillRect(obj.x + 1, obj.y + 4, 1,1);
+        ctx.fillStyle = '#820e21';
+        ctx.fillRect(obj.x + 2, obj.y + 1, 1,1);
+        ctx.fillStyle = '#820e21';
+        ctx.fillRect(obj.x + 3, obj.y + 0, 1,1);
+        ctx.fillStyle = '#820e21';
+        ctx.fillRect(obj.x + 5, obj.y + 0, 1,1);
+        ctx.fillStyle = '#820e21';
+        ctx.fillRect(obj.x + 7, obj.y + 0, 1,1);
+        ctx.fillStyle = '#820e21';
+        ctx.fillRect(obj.x + 5, obj.y + 7, 1,1);
+        ctx.fillStyle = '#820e21';
+        ctx.fillRect(obj.x + 4, obj.y + 7, 1,1);
+        ctx.fillStyle = '#820e21';
+        ctx.fillRect(obj.x + 3, obj.y + 7, 1,1);
+        ctx.fillStyle = '#820e21';
+        ctx.fillRect(obj.x + 4, obj.y + 8, 1,1);
+        ctx.fillStyle = '#820e21';
+        ctx.fillRect(obj.x + 3, obj.y + 6, 1,1);
+
+      
+        //donker maar lichter rood
+        ctx.fillStyle = '#a40b1d';
+        ctx.fillRect(obj.x + 1, obj.y + 1, 1,1);
+        ctx.fillStyle = '#c00b1c';
+        ctx.fillRect(obj.x + 2, obj.y + 2, 1,1);
+
+        //groen
+        ctx.fillStyle = '#9d870d';
+        ctx.fillRect(obj.x + 2, obj.y + 5, 1,1);
+        ctx.fillStyle = '#9d870d';
+        ctx.fillRect(obj.x + 1, obj.y + 6, 1,1);
+        ctx.fillStyle = '#b6b10d';
+        ctx.fillRect(obj.x + 0, obj.y + 6, 1,1);
+        ctx.fillStyle = '#9e870c';
+        ctx.fillRect(obj.x + -1, obj.y + 5, 1,1);
+        ctx.fillStyle = '#9d870d';
+        ctx.fillRect(obj.x + -2, obj.y + 4, 1,1);
+        ctx.fillStyle = '#78570a';
+        ctx.fillRect(obj.x + -3, obj.y + 4, 1,1);
+        ctx.fillStyle = '#633e07';
+        ctx.fillRect(obj.x + 5, obj.y + -2, 1,1);
+        ctx.fillStyle = '#b6b10d';
+        ctx.fillRect(obj.x + 4, obj.y + -3, 1,1);
+        ctx.fillStyle = '#8a641b';
+        ctx.fillRect(obj.x + 3, obj.y + -3, 1,1);
+        ctx.fillStyle = '#8a641b';
+        ctx.fillRect(obj.x + 2, obj.y + -2, 1,1);
+        ctx.fillStyle = '#8a641b';
+        ctx.fillRect(obj.x + 1, obj.y + -1, 1,1);
+        ctx.fillStyle = '#653d09';
+        ctx.fillRect(obj.x + 2, obj.y + -3, 1,1);
+        ctx.fillStyle = '#653d09';
+        ctx.fillRect(obj.x + 1, obj.y + -2, 1,1);
+        ctx.fillStyle = '#653d09';
+        ctx.fillRect(obj.x + 0, obj.y + -1, 1,1);
+        ctx.fillStyle = '#9d870d';
+        ctx.fillRect(obj.x + 2, obj.y + -1, 1,1);
+        ctx.fillStyle = '#9d870d';
+        ctx.fillRect(obj.x + 3, obj.y + -2, 1,1);
+        
+
+
+    }
+
+    var vuilnisbak = {
+        x: 50,
+        y: 15,
+        width: 9,
+        height: 10,
+    }
+  
+
+
+
+   
+
+    function drawVelnisbak() {
+        ctx.fillStyle = '#585858';
+        ctx.fillRect(vuilnisbak.x, vuilnisbak.y, vuilnisbak.width, vuilnisbak.height);
+
+
+        //grijze lijn licht
+        ctx.fillStyle = '#838383';
+        ctx.fillRect(vuilnisbak.x + 2, vuilnisbak.y, 1, 1);
+        ctx.fillStyle = '#838383';
+        ctx.fillRect(vuilnisbak.x + 2, vuilnisbak.y + 1, 1, 1);
+        ctx.fillStyle = '#838383';
+        ctx.fillRect(vuilnisbak.x + 2, vuilnisbak.y + 2, 1, 1);
+        ctx.fillStyle = '#838383';
+        ctx.fillRect(vuilnisbak.x + 2, vuilnisbak.y + 3, 1, 1);
+        ctx.fillStyle = '#838383';
+        ctx.fillRect(vuilnisbak.x + 2, vuilnisbak.y + 4, 1, 1);
+        ctx.fillStyle = '#838383';
+        ctx.fillRect(vuilnisbak.x + 2, vuilnisbak.y + 5, 1, 1);
+        ctx.fillStyle = '#838383';
+        ctx.fillRect(vuilnisbak.x + 2, vuilnisbak.y + 6, 1, 1);
+        ctx.fillStyle = '#838383';
+        ctx.fillRect(vuilnisbak.x + 2, vuilnisbak.y + 7, 1, 1);
+        ctx.fillStyle = '#838383';
+        ctx.fillRect(vuilnisbak.x + 2, vuilnisbak.y + 8, 1, 1);
+        ctx.fillStyle = '#838383';
+        ctx.fillRect(vuilnisbak.x + 2, vuilnisbak.y + 9, 1, 1);
+
+        ctx.fillStyle = '#838383';
+        ctx.fillRect(vuilnisbak.x + 5, vuilnisbak.y, 1, 1);
+        ctx.fillStyle = '#838383';
+        ctx.fillRect(vuilnisbak.x + 5, vuilnisbak.y + 1, 1, 1);
+        ctx.fillStyle = '#838383';
+        ctx.fillRect(vuilnisbak.x + 5, vuilnisbak.y + 2, 1, 1);
+        ctx.fillStyle = '#838383';
+        ctx.fillRect(vuilnisbak.x + 5, vuilnisbak.y + 3, 1, 1);
+        ctx.fillStyle = '#838383';
+        ctx.fillRect(vuilnisbak.x + 5, vuilnisbak.y + 4, 1, 1);
+        ctx.fillStyle = '#838383';
+        ctx.fillRect(vuilnisbak.x + 5, vuilnisbak.y + 5, 1, 1);
+        ctx.fillStyle = '#838383';
+        ctx.fillRect(vuilnisbak.x + 5, vuilnisbak.y + 6, 1, 1);
+        ctx.fillStyle = '#838383';
+        ctx.fillRect(vuilnisbak.x + 5, vuilnisbak.y + 7, 1, 1);
+        ctx.fillStyle = '#838383';
+        ctx.fillRect(vuilnisbak.x + 5, vuilnisbak.y + 8, 1, 1);
+        ctx.fillStyle = '#838383';
+        ctx.fillRect(vuilnisbak.x + 5, vuilnisbak.y + 9, 1, 1);
+
+        //lijen zwart
+        ctx.fillStyle = '#2d2d2d';
+        ctx.fillRect(vuilnisbak.x + 3, vuilnisbak.y + 0, 1, 1);
+        ctx.fillStyle = '#2d2d2d';
+        ctx.fillRect(vuilnisbak.x + 3, vuilnisbak.y + 1, 1, 1);
+        ctx.fillStyle = '#2d2d2d';
+        ctx.fillRect(vuilnisbak.x + 3, vuilnisbak.y + 2, 1, 1);
+        ctx.fillStyle = '#2d2d2d';
+        ctx.fillRect(vuilnisbak.x + 3, vuilnisbak.y + 3, 1, 1);
+        ctx.fillStyle = '#2d2d2d';
+        ctx.fillRect(vuilnisbak.x + 3, vuilnisbak.y + 4, 1, 1);
+        ctx.fillStyle = '#2d2d2d';
+        ctx.fillRect(vuilnisbak.x + 3, vuilnisbak.y + 5, 1, 1);
+        ctx.fillStyle = '#2d2d2d';
+        ctx.fillRect(vuilnisbak.x + 3, vuilnisbak.y + 6, 1, 1);
+        ctx.fillStyle = '#2d2d2d';
+        ctx.fillRect(vuilnisbak.x + 3, vuilnisbak.y + 7, 1, 1);
+        ctx.fillStyle = '#2d2d2d';
+        ctx.fillRect(vuilnisbak.x + 3, vuilnisbak.y + 8, 1, 1);
+        ctx.fillStyle = '#2d2d2d';
+        ctx.fillRect(vuilnisbak.x + 3, vuilnisbak.y + 9, 1, 1);
+
+        ctx.fillStyle = '#2d2d2d';
+        ctx.fillRect(vuilnisbak.x + 6, vuilnisbak.y + 0, 1, 1);
+        ctx.fillStyle = '#2d2d2d';
+        ctx.fillRect(vuilnisbak.x + 6, vuilnisbak.y + 1, 1, 1);
+        ctx.fillStyle = '#2d2d2d';
+        ctx.fillRect(vuilnisbak.x + 6, vuilnisbak.y + 2, 1, 1);
+        ctx.fillStyle = '#2d2d2d';
+        ctx.fillRect(vuilnisbak.x + 6, vuilnisbak.y + 3, 1, 1);
+        ctx.fillStyle = '#2d2d2d';
+        ctx.fillRect(vuilnisbak.x + 6, vuilnisbak.y + 4, 1, 1);
+        ctx.fillStyle = '#2d2d2d';
+        ctx.fillRect(vuilnisbak.x + 6, vuilnisbak.y + 5, 1, 1);
+        ctx.fillStyle = '#2d2d2d';
+        ctx.fillRect(vuilnisbak.x + 6, vuilnisbak.y + 6, 1, 1);
+        ctx.fillStyle = '#2d2d2d';
+        ctx.fillRect(vuilnisbak.x + 6, vuilnisbak.y + 7, 1, 1);
+        ctx.fillStyle = '#2d2d2d';
+        ctx.fillRect(vuilnisbak.x + 6, vuilnisbak.y + 8, 1, 1);
+        ctx.fillStyle = '#2d2d2d';
+        ctx.fillRect(vuilnisbak.x + 6, vuilnisbak.y + 9, 1, 1);
+
+        ctx.fillStyle = '#2d2d2d';
+        ctx.fillRect(vuilnisbak.x + -1, vuilnisbak.y - 1, 1, 1);
+        ctx.fillStyle = '#2d2d2d';
+        ctx.fillRect(vuilnisbak.x + 0, vuilnisbak.y - 1, 1, 1);
+        ctx.fillStyle = '#2d2d2d';
+        ctx.fillRect(vuilnisbak.x + 1, vuilnisbak.y - 1, 1, 1);
+        ctx.fillStyle = '#2d2d2d';
+        ctx.fillRect(vuilnisbak.x + 2, vuilnisbak.y - 1, 1, 1);
+        ctx.fillStyle = '#2d2d2d';
+        ctx.fillRect(vuilnisbak.x + 3, vuilnisbak.y - 1, 1, 1);
+        ctx.fillStyle = '#2d2d2d';
+        ctx.fillRect(vuilnisbak.x + 4, vuilnisbak.y - 1, 1, 1);
+        ctx.fillStyle = '#2d2d2d';
+        ctx.fillRect(vuilnisbak.x + 5, vuilnisbak.y - 1, 1, 1);
+        ctx.fillStyle = '#2d2d2d';
+        ctx.fillRect(vuilnisbak.x + 6, vuilnisbak.y - 1, 1, 1);
+        ctx.fillStyle = '#2d2d2d';
+        ctx.fillRect(vuilnisbak.x + 7, vuilnisbak.y - 1, 1, 1);
+        ctx.fillStyle = '#2d2d2d';
+        ctx.fillRect(vuilnisbak.x + 8, vuilnisbak.y - 1, 1, 1);
+        ctx.fillStyle = '#2d2d2d';
+        ctx.fillRect(vuilnisbak.x + 9, vuilnisbak.y - 1, 1, 1);
+
+        ctx.fillStyle = '#2d2d2d';
+        ctx.fillRect(vuilnisbak.x + 1, vuilnisbak.y + 10, 1, 1);
+        ctx.fillStyle = '#2d2d2d';
+        ctx.fillRect(vuilnisbak.x + 2, vuilnisbak.y + 10, 1, 1);
+        ctx.fillStyle = '#2d2d2d';
+        ctx.fillRect(vuilnisbak.x + 3, vuilnisbak.y + 10, 1, 1);
+        ctx.fillStyle = '#2d2d2d';
+        ctx.fillRect(vuilnisbak.x + 4, vuilnisbak.y + 10, 1, 1);
+        ctx.fillStyle = '#2d2d2d';
+        ctx.fillRect(vuilnisbak.x + 5, vuilnisbak.y + 10, 1, 1);
+        ctx.fillStyle = '#2d2d2d';
+        ctx.fillRect(vuilnisbak.x + 6, vuilnisbak.y + 10, 1, 1);
+        ctx.fillStyle = '#2d2d2d';
+        ctx.fillRect(vuilnisbak.x + 7, vuilnisbak.y + 10, 1, 1);
+
+        //deksel
+
+        ctx.fillStyle = '#585858';
+        ctx.fillRect(vuilnisbak.x + 0, vuilnisbak.y - 2, 1, 1);
+        ctx.fillStyle = '#585858';
+        ctx.fillRect(vuilnisbak.x + 1, vuilnisbak.y - 2, 1, 1);
+        ctx.fillStyle = '#585858';
+        ctx.fillRect(vuilnisbak.x + 2, vuilnisbak.y - 2, 1, 1);
+        ctx.fillStyle = '#585858';
+        ctx.fillRect(vuilnisbak.x + 3, vuilnisbak.y - 2, 1, 1);
+        ctx.fillStyle = '#585858';
+        ctx.fillRect(vuilnisbak.x + 4, vuilnisbak.y - 2, 1, 1);
+        ctx.fillStyle = '#585858';
+        ctx.fillRect(vuilnisbak.x + 5, vuilnisbak.y - 2, 1, 1);
+        ctx.fillStyle = '#585858';
+        ctx.fillRect(vuilnisbak.x + 6, vuilnisbak.y - 2, 1, 1);
+        ctx.fillStyle = '#585858';
+        ctx.fillRect(vuilnisbak.x + 7, vuilnisbak.y - 2, 1, 1);
+        ctx.fillStyle = '#585858';
+        ctx.fillRect(vuilnisbak.x + 8, vuilnisbak.y - 2, 1, 1);
+
+
+        ctx.fillStyle = '#585858';
+        ctx.fillRect(vuilnisbak.x + 1, vuilnisbak.y - 3, 1, 1);
+        ctx.fillStyle = '#585858';
+        ctx.fillRect(vuilnisbak.x + 2, vuilnisbak.y - 3, 1, 1);
+        ctx.fillStyle = '#585858';
+        ctx.fillRect(vuilnisbak.x + 3, vuilnisbak.y - 3, 1, 1);
+        ctx.fillStyle = '#585858';
+        ctx.fillRect(vuilnisbak.x + 4, vuilnisbak.y - 3, 1, 1);
+        ctx.fillStyle = '#585858';
+        ctx.fillRect(vuilnisbak.x + 5, vuilnisbak.y - 3, 1, 1);
+        ctx.fillStyle = '#585858';
+        ctx.fillRect(vuilnisbak.x + 6, vuilnisbak.y - 3, 1, 1);
+        ctx.fillStyle = '#585858';
+        ctx.fillRect(vuilnisbak.x + 7, vuilnisbak.y - 3, 1, 1);
+
+        ctx.fillStyle = '#585858';
+        ctx.fillRect(vuilnisbak.x + 3, vuilnisbak.y - 4, 1, 1);
+        ctx.fillStyle = '#585858';
+        ctx.fillRect(vuilnisbak.x + 4, vuilnisbak.y - 5, 1, 1);
+        ctx.fillStyle = '#585858';
+        ctx.fillRect(vuilnisbak.x + 5, vuilnisbak.y - 4, 1, 1);
+
+
+
+
+
+    }
+
+    var bankje = {
+        x: 65,
+        y: 15,
+        width: 16,
+        height: 4,
+        color: '#744f2d'
+    }
+    var bankje2 = {
+        x: 130,
+        y: 15,
+        width: 16,
+        height: 4,
+        color: '#744f2d'
+    }
+
+    var drawnpc1 = {
+        x: 120,
+        y: 10,
+        width: 10,
+        height: 10,
+        color: '#ecbc84',
+
+    }
+
+    function drawBankje(obj){
+        ctx.fillStyle = obj.color;
+        ctx.fillRect(obj.x,bankje.y,obj.width,obj.height);
+
+
+        // Grijzetop
+        ctx.fillStyle = '#5b676c';
+        ctx.fillRect(obj.x + 3, obj.y, 1, 1);
+        ctx.fillStyle = '#5b676c';
+        ctx.fillRect(obj.x + 4, obj.y, 1, 1);
+        ctx.fillStyle = '#5b676c';
+        ctx.fillRect(obj.x + 11, obj.y, 1, 1);
+        ctx.fillStyle = '#5b676c';
+        ctx.fillRect(obj.x + 12, obj.y, 1, 1);
+
+        // Donkerergrijs
+        ctx.fillStyle = '#4d5659';
+        ctx.fillRect(obj.x + 3, obj.y + 1, 1, 1);
+        ctx.fillStyle = '#4d5659';
+        ctx.fillRect(obj.x + 3, obj.y + 2, 1, 1);
+        ctx.fillStyle = '#4d5659';
+        ctx.fillRect(obj.x + 3, obj.y + 3, 1, 1);
+        ctx.fillStyle = '#4d5659';
+        ctx.fillRect(obj.x + 4, obj.y + 1, 1, 1);
+        ctx.fillStyle = '#4d5659';
+        ctx.fillRect(obj.x + 4, obj.y + 2, 1, 1);
+        ctx.fillStyle = '#4d5659';
+        ctx.fillRect(obj.x + 4, obj.y + 3, 1, 1);
+        ctx.fillStyle = '#4d5659';
+        ctx.fillRect(obj.x + 3, obj.y + 4, 1, 1);
+        ctx.fillStyle = '#4d5659';
+        ctx.fillRect(obj.x + 3, obj.y + 5, 1, 1);
+        ctx.fillStyle = '#4d5659';
+        ctx.fillRect(obj.x + 4, obj.y + 4, 1, 1);
+        ctx.fillStyle = '#4d5659';
+        ctx.fillRect(obj.x + 4, obj.y + 5, 1, 1);
+        ctx.fillStyle = '#4d5659';
+        ctx.fillRect(obj.x + 11, obj.y + 4, 1, 1);
+        ctx.fillStyle = '#4d5659';
+        ctx.fillRect(obj.x + 11, obj.y + 5, 1, 1);
+        ctx.fillStyle = '#4d5659';
+        ctx.fillRect(obj.x + 12, obj.y + 4, 1, 1);
+        ctx.fillStyle = '#4d5659';
+        ctx.fillRect(obj.x + 12, obj.y + 5, 1, 1);
+
+        ctx.fillStyle = '#4d5659';
+        ctx.fillRect(obj.x + 11, obj.y + 1, 1, 1);
+        ctx.fillStyle = '#4d5659';
+        ctx.fillRect(obj.x + 11, obj.y + 2, 1, 1);
+        ctx.fillStyle = '#4d5659';
+        ctx.fillRect(obj.x + 11, obj.y + 3, 1, 1);
+        ctx.fillStyle = '#4d5659';
+        ctx.fillRect(obj.x + 12, obj.y + 1, 1, 1);
+        ctx.fillStyle = '#4d5659';
+        ctx.fillRect(obj.x + 12, obj.y + 2, 1, 1);
+        ctx.fillStyle = '#4d5659';
+        ctx.fillRect(obj.x + 12, obj.y + 3, 1, 1);
+
+        // BruineOnderkant
+        ctx.fillStyle = '#744f2d';
+        ctx.fillRect(obj.x + 0, obj.y + 6, 1, 1);
+        ctx.fillStyle = '#744f2d';
+        ctx.fillRect(obj.x + 1, obj.y + 6, 1, 1);
+        ctx.fillStyle = '#744f2d';
+        ctx.fillRect(obj.x + 2, obj.y + 6, 1, 1);
+        ctx.fillStyle = '#744f2d';
+        ctx.fillRect(obj.x + 3, obj.y + 6, 1, 1);
+        ctx.fillStyle = '#744f2d';
+        ctx.fillRect(obj.x + 4, obj.y + 6, 1, 1);
+        ctx.fillStyle = '#744f2d';
+        ctx.fillRect(obj.x + 5, obj.y + 6, 1, 1);
+        ctx.fillStyle = '#744f2d';
+        ctx.fillRect(obj.x + 6, obj.y + 6, 1, 1);
+        ctx.fillStyle = '#744f2d';
+        ctx.fillRect(obj.x + 7, obj.y + 6, 1, 1);
+        ctx.fillStyle = '#744f2d';
+        ctx.fillRect(obj.x + 8, obj.y + 6, 1, 1);
+        ctx.fillStyle = '#744f2d';
+        ctx.fillRect(obj.x + 9, obj.y + 6, 1, 1);
+        ctx.fillStyle = '#744f2d';
+        ctx.fillRect(obj.x + 10, obj.y + 6, 1, 1);
+        ctx.fillStyle = '#744f2d';
+        ctx.fillRect(obj.x + 11, obj.y + 6, 1, 1);
+        ctx.fillStyle = '#744f2d';
+        ctx.fillRect(obj.x + 12, obj.y + 6, 1, 1);
+        ctx.fillStyle = '#744f2d';
+        ctx.fillRect(obj.x + 13, obj.y + 6, 1, 1);
+        ctx.fillStyle = '#744f2d';
+        ctx.fillRect(obj.x + 14, obj.y + 6, 1, 1);
+        ctx.fillStyle = '#744f2d';
+        ctx.fillRect(obj.x + 15, obj.y + 6, 1, 1);
+
+        ctx.fillStyle = '#744f2d';
+        ctx.fillRect(obj.x + 1, obj.y + 7, 1, 1);
+        ctx.fillStyle = '#744f2d';
+        ctx.fillRect(obj.x + 2, obj.y + 7, 1, 1);
+        ctx.fillStyle = '#744f2d';
+        ctx.fillRect(obj.x + 3, obj.y + 7, 1, 1);
+        ctx.fillStyle = '#744f2d';
+        ctx.fillRect(obj.x + 4, obj.y + 7, 1, 1);
+        ctx.fillStyle = '#744f2d';
+        ctx.fillRect(obj.x + 5, obj.y + 7, 1, 1);
+        ctx.fillStyle = '#744f2d';
+        ctx.fillRect(obj.x + 6, obj.y + 7, 1, 1);
+        ctx.fillStyle = '#744f2d';
+        ctx.fillRect(obj.x + 7, obj.y + 7, 1, 1);
+        ctx.fillStyle = '#744f2d';
+        ctx.fillRect(obj.x + 8, obj.y + 7, 1, 1);
+        ctx.fillStyle = '#744f2d';
+        ctx.fillRect(obj.x + 9, obj.y + 7, 1, 1);
+        ctx.fillStyle = '#744f2d';
+        ctx.fillRect(obj.x + 10, obj.y + 7, 1, 1);
+        ctx.fillStyle = '#744f2d';
+        ctx.fillRect(obj.x + 11, obj.y + 7, 1, 1);
+        ctx.fillStyle = '#744f2d';
+        ctx.fillRect(obj.x + 12, obj.y + 7, 1, 1);
+        ctx.fillStyle = '#744f2d';
+        ctx.fillRect(obj.x + 13, obj.y + 7, 1, 1);
+        ctx.fillStyle = '#744f2d';
+        ctx.fillRect(obj.x + 14, obj.y + 7, 1, 1);
+
+        ctx.fillStyle = '#4d5659';
+        ctx.fillRect(obj.x + 3, obj.y + 8, 1, 1);
+        ctx.fillStyle = '#4d5659';
+        ctx.fillRect(obj.x + 4, obj.y + 8, 1, 1);
+        ctx.fillStyle = '#4d5659';
+        ctx.fillRect(obj.x + 3, obj.y + 9, 1, 1);
+
+        ctx.fillStyle = '#4d5659';
+        ctx.fillRect(obj.x + 11, obj.y + 8, 1, 1);
+        ctx.fillStyle = '#4d5659';
+        ctx.fillRect(obj.x + 12, obj.y + 8, 1, 1);
+        ctx.fillStyle = '#4d5659';
+        ctx.fillRect(obj.x + 12, obj.y + 9, 1, 1);
+
+        // Grijsonder
+        ctx.fillStyle = '#5b676c';
+        ctx.fillRect(obj.x + 12, obj.y + 10, 1, 1);
+        ctx.fillStyle = '#5b676c';
+        ctx.fillRect(obj.x + 11, obj.y + 9, 1, 1);
+        ctx.fillStyle = '#5b676c';
+        ctx.fillRect(obj.x + 3, obj.y + 10, 1, 1);
+        ctx.fillStyle = '#5b676c';
+        ctx.fillRect(obj.x + 4, obj.y + 9, 1, 1);
+
+    }
+
+    function drawnpc1right(){
+        ctx.fillStyle = drawnpc1.color;
+        ctx.fillRect(drawnpc1.x,drawnpc1.y,drawnpc1.width,drawnpc1.height);
+
+    }
+
+    function drawPlayerRight() {
+        ctx.fillStyle = player.color;
+        ctx.fillRect(player.x, player.y, player.width, player.height);
+
+        //ogen
+        ctx.fillStyle = '#fffefa';
+        ctx.fillRect(player.x + 2, player.y + 4, 1, 1)
+        ctx.fillStyle = '#fffefa';
+        ctx.fillRect(player.x + 2, player.y + 5, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 3, player.y + 5, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 3, player.y + 4, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 2, player.y + 3, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 3, player.y + 3, 1, 1)
+
+        //andere kant ogen
+        ctx.fillStyle = '#fffefa';
+        ctx.fillRect(player.x + 6, player.y + 4, 1, 1)
+        ctx.fillStyle = '#fffefa';
+        ctx.fillRect(player.x + 6, player.y + 5, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 7, player.y + 5, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 7, player.y + 4, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 6, player.y + 3, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 7, player.y + 3, 1, 1)
+
+        //kin
+        ctx.fillStyle = '#c27d50';
+        ctx.fillRect(player.x + 6, player.y + 9, 1, 1)
+        ctx.fillStyle = '#c27d50';
+        ctx.fillRect(player.x + 5, player.y + 9, 1, 1)
+        ctx.fillStyle = '#c27d50';
+        ctx.fillRect(player.x + 7, player.y + 9, 1, 1)
+        ctx.fillStyle = '#c27d50';
+        ctx.fillRect(player.x + 8, player.y + 9, 1, 1)
+        ctx.fillStyle = '#c27d50';
+        ctx.fillRect(player.x + 9, player.y + 8, 1, 1)
+        ctx.fillStyle = '#c27d50';
+        ctx.fillRect(player.x + 4, player.y + 9, 1, 1)
+        ctx.fillStyle = '#c27d50';
+        ctx.fillRect(player.x + 3, player.y + 9, 1, 1)
+        ctx.fillStyle = '#c27d50';
+        ctx.fillRect(player.x + 2, player.y + 9, 1, 1)
+        ctx.fillStyle = '#c27d50';
+        ctx.fillRect(player.x + 1, player.y + 9, 1, 1)
+        ctx.fillStyle = '#c27d50';
+        ctx.fillRect(player.x + 1, player.y + 8, 1, 1)
+        ctx.fillStyle = '#c27d50';
+        ctx.fillRect(player.x + 1, player.y + 7, 1, 1)
+        ctx.fillStyle = '#c27d50';
+        ctx.fillRect(player.x + 1, player.y + 6, 1, 1)
+        ctx.fillStyle = '#c27d50';
+        ctx.fillRect(player.x + 0, player.y + 6, 1, 1)
+        ctx.fillStyle = '#c27d50';
+        ctx.fillRect(player.x + 0, player.y + 5, 1, 1)
+        ctx.fillStyle = '#c27d50';
+        ctx.fillRect(player.x + 0, player.y + 4, 1, 1)
+        ctx.fillStyle = '#c27d50';
+        ctx.fillRect(player.x + 0, player.y + 3, 1, 1)
+        ctx.fillStyle = '#c27d50';
+        ctx.fillRect(player.x + 1, player.y + 2, 1, 1)
+        ctx.fillStyle = '#c27d50';
+        ctx.fillRect(player.x + 2, player.y + 2, 1, 1)
+        ctx.fillStyle = '#c27d50';
+        ctx.fillRect(player.x + 3, player.y + 1, 1, 1)
+        ctx.fillStyle = '#c27d50';
+        ctx.fillRect(player.x + 4, player.y + 1, 1, 1)
+        ctx.fillStyle = '#c27d50';
+        ctx.fillRect(player.x + 5, player.y + 1, 1, 1)
+        ctx.fillStyle = '#c27d50';
+        ctx.fillRect(player.x + 6, player.y + 1, 1, 1)
+        ctx.fillStyle = '#c27d50';
+        ctx.fillRect(player.x + 7, player.y + 1, 1, 1)
+        ctx.fillStyle = '#c27d50';
+        ctx.fillRect(player.x + 8, player.y + 2, 1, 1)
+        ctx.fillStyle = '#edbc84';
+        ctx.fillRect(player.x + -1, player.y + 5, 1, 1)
+        ctx.fillStyle = '#edbc84';
+        ctx.fillRect(player.x + -1, player.y + 4, 1, 1)
+        ctx.fillStyle = 'white';
+        ctx.fillRect(player.x + 1, player.y + 7, 1, 1)
+        ctx.fillStyle = '#f9d8b2';
+        ctx.fillRect(player.x + 1, player.y + 5, 1, 1)
+        ctx.fillStyle = '#f9d8b2';
+        ctx.fillRect(player.x + 4, player.y + 5, 1, 1)
+        ctx.fillStyle = '#f9d8b2';
+        ctx.fillRect(player.x + 5, player.y + 5, 1, 1)
+        ctx.fillStyle = '#f9d8b2';
+        ctx.fillRect(player.x + 8, player.y + 5, 1, 1)
+        ctx.fillStyle = '#f9d8b2';
+        ctx.fillRect(player.x + 9, player.y + 5, 1, 1)
+        ctx.fillStyle = 'white';
+        ctx.fillRect(player.x + 2, player.y + 8, 1, 1)
+        ctx.fillStyle = 'white';
+        ctx.fillRect(player.x + 3, player.y + 8, 1, 1)
+        ctx.fillStyle = 'white';
+        ctx.fillRect(player.x + 4, player.y + 8, 1, 1)
+        ctx.fillStyle = 'white';
+        ctx.fillRect(player.x + 5, player.y + 8, 1, 1)
+        ctx.fillStyle = 'white';
+        ctx.fillRect(player.x + 6, player.y + 8, 1, 1)
+        ctx.fillStyle = 'white';
+        ctx.fillRect(player.x + 7, player.y + 8, 1, 1)
+        ctx.fillStyle = 'white';
+        ctx.fillRect(player.x + 8, player.y + 7, 1, 1)
+
+
+
+
+
+
+        //haar
+        ctx.fillStyle = '#5b2a33';
+        ctx.fillRect(player.x + -2, player.y + 4, 1, 1)
+        ctx.fillStyle = '#5b2a33';
+        ctx.fillRect(player.x + -2, player.y + 3, 1, 1)
+        ctx.fillStyle = '#5b2a33';
+        ctx.fillRect(player.x + -1, player.y + 3, 1, 1)
+        ctx.fillStyle = '#5b2a33';
+        ctx.fillRect(player.x + 0, player.y + 2, 1, 1)
+        ctx.fillStyle = '#5b2a33';
+        ctx.fillRect(player.x + 1, player.y + 1, 1, 1)
+        ctx.fillStyle = '#5b2a33';
+        ctx.fillRect(player.x + 2, player.y + 1, 1, 1)
+        ctx.fillStyle = '#5b2a33';
+        ctx.fillRect(player.x + 3, player.y + 0, 1, 1)
+        ctx.fillStyle = '#5b2a33';
+        ctx.fillRect(player.x + 4, player.y + 0, 1, 1)
+        ctx.fillStyle = '#5b2a33';
+        ctx.fillRect(player.x + 5, player.y + 0, 1, 1)
+        ctx.fillStyle = '#5b2a33';
+        ctx.fillRect(player.x + 6, player.y + 0, 1, 1)
+        ctx.fillStyle = '#5b2a33';
+        ctx.fillRect(player.x + 7, player.y + 0, 1, 1)
+        ctx.fillStyle = '#5b2a33';
+        ctx.fillRect(player.x + 8, player.y + 1, 1, 1)
+        ctx.fillStyle = '#5b2a33';
+        ctx.fillRect(player.x + 9, player.y + 2, 1, 1)
+        ctx.fillStyle = '#5b2a33';
+        ctx.fillRect(player.x + 10, player.y + 2, 1, 1)
+        ctx.fillStyle = '#5b2a33';
+        ctx.fillRect(player.x + 4, player.y + -1, 1, 1)
+        ctx.fillStyle = '#5b2a33';
+        ctx.fillRect(player.x + 3, player.y + -2, 1, 1)
+        ctx.fillStyle = '#5b2a33';
+        ctx.fillRect(player.x + 5, player.y + -2, 1, 1)
+        ctx.fillStyle = '#5b2a33';
+        ctx.fillRect(player.x + 6, player.y + -1, 1, 1)
+        ctx.fillStyle = '#944445';
+        ctx.fillRect(player.x + -2, player.y + 2, 1, 1)
+        ctx.fillStyle = '#944445';
+        ctx.fillRect(player.x + -2, player.y + 1, 1, 1)
+        ctx.fillStyle = '#944445';
+        ctx.fillRect(player.x + -1, player.y + 2, 1, 1)
+        ctx.fillStyle = '#944445';
+        ctx.fillRect(player.x + -1, player.y + 0, 1, 1)
+        ctx.fillStyle = '#944445';
+        ctx.fillRect(player.x + 0, player.y + -1, 1, 1)
+        ctx.fillStyle = '#944445';
+        ctx.fillRect(player.x + 1, player.y + -2, 1, 1)
+        ctx.fillStyle = '#944445';
+        ctx.fillRect(player.x + 2, player.y + -2, 1, 1)
+        ctx.fillStyle = '#944445';
+        ctx.fillRect(player.x + 6, player.y + -2, 1, 1)
+        ctx.fillStyle = '#944445';
+        ctx.fillRect(player.x + 7, player.y + -2, 1, 1)
+        ctx.fillStyle = '#944445';
+        ctx.fillRect(player.x + 8, player.y + -2, 1, 1)
+        ctx.fillStyle = '#944445';
+        ctx.fillRect(player.x + 7, player.y + -1, 1, 1)
+        ctx.fillStyle = '#944445';
+        ctx.fillRect(player.x + 8, player.y + -1, 1, 1)
+        ctx.fillStyle = '#944445';
+        ctx.fillRect(player.x + 8, player.y + 0, 1, 1)
+        ctx.fillStyle = '#944445';
+        ctx.fillRect(player.x + 9, player.y + 1, 1, 1)
+        ctx.fillStyle = '#944445';
+        ctx.fillRect(player.x + 0, player.y + 1, 1, 1)
+        ctx.fillStyle = '#944445';
+        ctx.fillRect(player.x + 1, player.y + 0, 1, 1)
+        ctx.fillStyle = '#944445';
+        ctx.fillRect(player.x + 2, player.y + 0, 1, 1)
+        ctx.fillStyle = '#944445';
+        ctx.fillRect(player.x + 2, player.y + -1, 1, 1)
+        ctx.fillStyle = '#944445';
+        ctx.fillRect(player.x + 3, player.y + -1, 1, 1)
+        ctx.fillStyle = '#c77b4d';
+        ctx.fillRect(player.x + 1, player.y + -1, 1, 1)
+        ctx.fillStyle = '#c77b4d';
+        ctx.fillRect(player.x + 0, player.y + 0, 1, 1)
+        ctx.fillStyle = '#c77b4d';
+        ctx.fillRect(player.x + -1, player.y + 1, 1, 1)
+        ctx.fillStyle = '#c77b4d';
+        ctx.fillRect(player.x + 9, player.y + -1, 1, 1)
+        ctx.fillStyle = '#c77b4d';
+        ctx.fillRect(player.x + 9, player.y + 0, 1, 1)
+        ctx.fillStyle = '#c77b4d';
+        ctx.fillRect(player.x + 10, player.y + 0, 1, 1)
+        ctx.fillStyle = '#c77b4d';
+        ctx.fillRect(player.x + 10, player.y + 1, 1, 1)
+        ctx.fillStyle = '#c77b4d';
+        ctx.fillRect(player.x + 8, player.y + -2, 1, 1)
+
+        //zijkantenlijen
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 0, player.y + 8, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 0, player.y + 9, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 9, player.y + 9, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 10, player.y + 8, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 10, player.y + 7, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 10, player.y + 6, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 10, player.y + 5, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 10, player.y + 4, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 10, player.y + 3, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 11, player.y + 3, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 11, player.y + 2, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 11, player.y + 1, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 11, player.y + 0, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 10, player.y + -1, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 9, player.y + -2, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 8, player.y + -3, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 7, player.y + -3, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 6, player.y + -3, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 5, player.y + -3, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 4, player.y + -3, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 3, player.y + -3, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 2, player.y + -3, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 1, player.y + -3, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 0, player.y + -2, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + -1, player.y + -1, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + -2, player.y + 0, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + -3, player.y + 1, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + -3, player.y + 2, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + -3, player.y + 3, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + -3, player.y + 4, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + -2, player.y + 5, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + -1, player.y + 6, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + -1, player.y + 7, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 0, player.y + 7, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 5, player.y + -1, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 4, player.y + -2, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + -1, player.y + 10, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + -2, player.y + 11, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + -2, player.y + 12, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + -2, player.y + 13, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + -1, player.y + 14, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 0, player.y + 14, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 0, player.y + 15, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 0, player.y + 16, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 0, player.y + 17, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 1, player.y + 17, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 2, player.y + 17, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 3, player.y + 17, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 3, player.y + 16, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 4, player.y + 16, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 5, player.y + 16, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 6, player.y + 16, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 6, player.y + 17, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 7, player.y + 17, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 8, player.y + 17, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 9, player.y + 17, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 9, player.y + 16, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 9, player.y + 15, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 10, player.y + 14, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 11, player.y + 13, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 11, player.y + 12, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 11, player.y + 11, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 10, player.y + 10, 1, 1)
+
+
+        //kleren
+        ctx.fillStyle = '#478965';
+        ctx.fillRect(player.x + 0, player.y + 10, 1, 1)
+        ctx.fillStyle = '#478965';
+        ctx.fillRect(player.x + 1, player.y + 10, 1, 1)
+        ctx.fillStyle = '#478965';
+        ctx.fillRect(player.x + 2, player.y + 10, 1, 1)
+        ctx.fillStyle = '#478965';
+        ctx.fillRect(player.x + 3, player.y + 10, 1, 1)
+        ctx.fillStyle = '#478965';
+        ctx.fillRect(player.x + 4, player.y + 10, 1, 1)
+        ctx.fillStyle = '#478965';
+        ctx.fillRect(player.x + 5, player.y + 10, 1, 1)
+        ctx.fillStyle = '#478965';
+        ctx.fillRect(player.x + 6, player.y + 10, 1, 1)
+        ctx.fillStyle = '#478965';
+        ctx.fillRect(player.x + 7, player.y + 10, 1, 1)
+        ctx.fillStyle = '#478965';
+        ctx.fillRect(player.x + 8, player.y + 10, 1, 1)
+        ctx.fillStyle = '#478965';
+        ctx.fillRect(player.x + 9, player.y + 10, 1, 1)
+        ctx.fillStyle = '#478965';
+        ctx.fillRect(player.x + 10, player.y + 11, 1, 1)
+        ctx.fillStyle = '#478965';
+        ctx.fillRect(player.x + 10, player.y + 12, 1, 1)
+        ctx.fillStyle = '#478965';
+        ctx.fillRect(player.x + 9, player.y + 11, 1, 1)
+        ctx.fillStyle = '#478965';
+        ctx.fillRect(player.x + 8, player.y + 11, 1, 1)
+        ctx.fillStyle = '#478965';
+        ctx.fillRect(player.x + 7, player.y + 11, 1, 1)
+        ctx.fillStyle = '#478965';
+        ctx.fillRect(player.x + 5, player.y + 11, 1, 1)
+        ctx.fillStyle = '#478965';
+        ctx.fillRect(player.x + 4, player.y + 11, 1, 1)
+        ctx.fillStyle = '#478965';
+        ctx.fillRect(player.x + 3, player.y + 11, 1, 1)
+        ctx.fillStyle = '#478965';
+        ctx.fillRect(player.x + 2, player.y + 11, 1, 1)
+        ctx.fillStyle = '#478965';
+        ctx.fillRect(player.x + 1, player.y + 11, 1, 1)
+        ctx.fillStyle = '#478965';
+        ctx.fillRect(player.x + 0, player.y + 11, 1, 1)
+        ctx.fillStyle = '#478965';
+        ctx.fillRect(player.x + -1, player.y + 11, 1, 1)
+        ctx.fillStyle = '#478965';
+        ctx.fillRect(player.x + -1, player.y + 12, 1, 1)
+        ctx.fillStyle = '#478965';
+        ctx.fillRect(player.x + 0, player.y + 12, 1, 1)
+        ctx.fillStyle = '#478965';
+        ctx.fillRect(player.x + 2, player.y + 12, 1, 1)
+        ctx.fillStyle = '#478965';
+        ctx.fillRect(player.x + 3, player.y + 12, 1, 1)
+        ctx.fillStyle = '#478965';
+        ctx.fillRect(player.x + 4, player.y + 12, 1, 1)
+        ctx.fillStyle = '#478965';
+        ctx.fillRect(player.x + 5, player.y + 12, 1, 1)
+        ctx.fillStyle = '#478965';
+        ctx.fillRect(player.x + 7, player.y + 12, 1, 1)
+        ctx.fillStyle = '#478965';
+        ctx.fillRect(player.x + 8, player.y + 12, 1, 1)
+        ctx.fillStyle = '#478965';
+        ctx.fillRect(player.x + 9, player.y + 12, 1, 1)
+        ctx.fillStyle = '#478965';
+        ctx.fillRect(player.x + 9, player.y + 12, 1, 1)
+        ctx.fillStyle = '#355455';
+        ctx.fillRect(player.x + 9, player.y + 12, 1, 1)
+        ctx.fillStyle = '#355455';
+        ctx.fillRect(player.x + 6, player.y + 12, 1, 1)
+        ctx.fillStyle = '#355455';
+        ctx.fillRect(player.x + 6, player.y + 11, 1, 1)
+        ctx.fillStyle = '#355455';
+        ctx.fillRect(player.x + 1, player.y + 12, 1, 1)
+        ctx.fillStyle = '#355455';
+        ctx.fillRect(player.x + 6, player.y + 10, 1, 1)
+
+
+
+
+
+        //handen
+        ctx.fillStyle = '#e9be83';
+        ctx.fillRect(player.x + -1, player.y + 13, 1, 1)
+        ctx.fillStyle = '#e9be83';
+        ctx.fillRect(player.x + 0, player.y + 13, 1, 1)
+        ctx.fillStyle = '#e9be83';
+        ctx.fillRect(player.x + 10, player.y + 13, 1, 1)
+
+
+
+        //broek
+        ctx.fillStyle = '#3e3b7a';
+        ctx.fillRect(player.x + 1, player.y + 13, 1, 1)
+        ctx.fillStyle = '#3e3b7a';
+        ctx.fillRect(player.x + 2, player.y + 13, 1, 1)
+        ctx.fillStyle = '#3e3b7a';
+        ctx.fillRect(player.x + 3, player.y + 13, 1, 1)
+        ctx.fillStyle = '#3e3b7a';
+        ctx.fillRect(player.x + 4, player.y + 13, 1, 1)
+        ctx.fillStyle = '#3e3b7a';
+        ctx.fillRect(player.x + 5, player.y + 13, 1, 1)
+        ctx.fillStyle = '#3e3b7a';
+        ctx.fillRect(player.x + 6, player.y + 13, 1, 1)
+        ctx.fillStyle = '#3e3b7a';
+        ctx.fillRect(player.x + 7, player.y + 13, 1, 1)
+        ctx.fillStyle = '#3e3b7a';
+        ctx.fillRect(player.x + 8, player.y + 13, 1, 1)
+        ctx.fillStyle = '#3e3b7a';
+        ctx.fillRect(player.x + 9, player.y + 13, 1, 1)
+        ctx.fillStyle = '#3e3b7a';
+        ctx.fillRect(player.x + 9, player.y + 14, 1, 1)
+        ctx.fillStyle = '#3e3b7a';
+        ctx.fillRect(player.x + 1, player.y + 14, 1, 1)
+        ctx.fillStyle = '#3e3b7a';
+        ctx.fillRect(player.x + 1, player.y + 15, 1, 1)
+        ctx.fillStyle = '#3e3b7a';
+        ctx.fillRect(player.x + 1, player.y + 16, 1, 1)
+        ctx.fillStyle = '#3e3b7a';
+        ctx.fillRect(player.x + 3, player.y + 15, 1, 1)
+        ctx.fillStyle = '#3e3b7a';
+        ctx.fillRect(player.x + 4, player.y + 15, 1, 1)
+        ctx.fillStyle = '#3e3b7a';
+        ctx.fillRect(player.x + 5, player.y + 15, 1, 1)
+        ctx.fillStyle = '#3e3b7a';
+        ctx.fillRect(player.x + 6, player.y + 15, 1, 1)
+        ctx.fillStyle = '#3e3b7a';
+        ctx.fillRect(player.x + 7, player.y + 15, 1, 1)
+        ctx.fillStyle = '#3e3b7a';
+        ctx.fillRect(player.x + 7, player.y + 16, 1, 1)
+        ctx.fillStyle = '#526dd6';
+        ctx.fillRect(player.x + 8, player.y + 16, 1, 1)
+        ctx.fillStyle = '#526dd6';
+        ctx.fillRect(player.x + 8, player.y + 15, 1, 1)
+        ctx.fillStyle = '#526dd6';
+        ctx.fillRect(player.x + 8, player.y + 14, 1, 1)
+        ctx.fillStyle = '#526dd6';
+        ctx.fillRect(player.x + 7, player.y + 14, 1, 1)
+        ctx.fillStyle = '#526dd6';
+        ctx.fillRect(player.x + 6, player.y + 14, 1, 1)
+        ctx.fillStyle = '#526dd6';
+        ctx.fillRect(player.x + 5, player.y + 14, 1, 1)
+        ctx.fillStyle = '#526dd6';
+        ctx.fillRect(player.x + 4, player.y + 14, 1, 1)
+        ctx.fillStyle = '#526dd6';
+        ctx.fillRect(player.x + 3, player.y + 14, 1, 1)
+        ctx.fillStyle = '#526dd6';
+        ctx.fillRect(player.x + 2, player.y + 14, 1, 1)
+        ctx.fillStyle = '#526dd6';
+        ctx.fillRect(player.x + 2, player.y + 15, 1, 1)
+        ctx.fillStyle = '#526dd6';
+        ctx.fillRect(player.x + 2, player.y + 16, 1, 1)
+
+
+
+
+
+    }
+
+    function drawPlayerLeft() {
+        ctx.fillStyle = player.color;
+        ctx.fillRect(player.x, player.y, player.width, player.height);
+
+        //ogen
+        ctx.fillStyle = '#fffefa';
+        ctx.fillRect(player.x + 3, player.y + 4, 1, 1)
+        ctx.fillStyle = '#fffefa';
+        ctx.fillRect(player.x + 3, player.y + 5, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 2, player.y + 5, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 2, player.y + 4, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 3, player.y + 3, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 2, player.y + 3, 1, 1)
+
+        //andere kant ogen
+        ctx.fillStyle = '#fffefa';
+        ctx.fillRect(player.x + 7, player.y + 4, 1, 1)
+        ctx.fillStyle = '#fffefa';
+        ctx.fillRect(player.x + 7, player.y + 5, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 6, player.y + 5, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 6, player.y + 4, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 7, player.y + 3, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 6, player.y + 3, 1, 1)
+
+        //kin
+        ctx.fillStyle = '#c27d50';
+        ctx.fillRect(player.x + 6, player.y + 9, 1, 1)
+        ctx.fillStyle = '#c27d50';
+        ctx.fillRect(player.x + 5, player.y + 9, 1, 1)
+        ctx.fillStyle = '#c27d50';
+        ctx.fillRect(player.x + 7, player.y + 9, 1, 1)
+        ctx.fillStyle = '#c27d50';
+        ctx.fillRect(player.x + 8, player.y + 9, 1, 1)
+        ctx.fillStyle = '#c27d50';
+        ctx.fillRect(player.x + 9, player.y + 8, 1, 1)
+        ctx.fillStyle = '#c27d50';
+        ctx.fillRect(player.x + 4, player.y + 9, 1, 1)
+        ctx.fillStyle = '#c27d50';
+        ctx.fillRect(player.x + 3, player.y + 9, 1, 1)
+        ctx.fillStyle = '#c27d50';
+        ctx.fillRect(player.x + 2, player.y + 9, 1, 1)
+        ctx.fillStyle = '#c27d50';
+        ctx.fillRect(player.x + 1, player.y + 9, 1, 1)
+        ctx.fillStyle = '#c27d50';
+        ctx.fillRect(player.x + 1, player.y + 8, 1, 1)
+        ctx.fillStyle = '#c27d50';
+        ctx.fillRect(player.x + 1, player.y + 7, 1, 1)
+        ctx.fillStyle = '#c27d50';
+        ctx.fillRect(player.x + 1, player.y + 6, 1, 1)
+        ctx.fillStyle = '#c27d50';
+        ctx.fillRect(player.x + 0, player.y + 6, 1, 1)
+        ctx.fillStyle = '#c27d50';
+        ctx.fillRect(player.x + 0, player.y + 5, 1, 1)
+        ctx.fillStyle = '#c27d50';
+        ctx.fillRect(player.x + 0, player.y + 4, 1, 1)
+        ctx.fillStyle = '#c27d50';
+        ctx.fillRect(player.x + 0, player.y + 3, 1, 1)
+        ctx.fillStyle = '#c27d50';
+        ctx.fillRect(player.x + 1, player.y + 2, 1, 1)
+        ctx.fillStyle = '#c27d50';
+        ctx.fillRect(player.x + 2, player.y + 2, 1, 1)
+        ctx.fillStyle = '#c27d50';
+        ctx.fillRect(player.x + 3, player.y + 1, 1, 1)
+        ctx.fillStyle = '#c27d50';
+        ctx.fillRect(player.x + 4, player.y + 1, 1, 1)
+        ctx.fillStyle = '#c27d50';
+        ctx.fillRect(player.x + 5, player.y + 1, 1, 1)
+        ctx.fillStyle = '#c27d50';
+        ctx.fillRect(player.x + 6, player.y + 1, 1, 1)
+        ctx.fillStyle = '#c27d50';
+        ctx.fillRect(player.x + 7, player.y + 1, 1, 1)
+        ctx.fillStyle = '#c27d50';
+        ctx.fillRect(player.x + 8, player.y + 2, 1, 1)
+        ctx.fillStyle = '#edbc84';
+        ctx.fillRect(player.x + -1, player.y + 5, 1, 1)
+        ctx.fillStyle = '#edbc84';
+        ctx.fillRect(player.x + -1, player.y + 4, 1, 1)
+        ctx.fillStyle = 'white';
+        ctx.fillRect(player.x + 1, player.y + 7, 1, 1)
+        ctx.fillStyle = '#f9d8b2';
+        ctx.fillRect(player.x + 1, player.y + 5, 1, 1)
+        ctx.fillStyle = '#f9d8b2';
+        ctx.fillRect(player.x + 4, player.y + 5, 1, 1)
+        ctx.fillStyle = '#f9d8b2';
+        ctx.fillRect(player.x + 5, player.y + 5, 1, 1)
+        ctx.fillStyle = '#f9d8b2';
+        ctx.fillRect(player.x + 8, player.y + 5, 1, 1)
+        ctx.fillStyle = '#f9d8b2';
+        ctx.fillRect(player.x + 9, player.y + 5, 1, 1)
+        ctx.fillStyle = 'white';
+        ctx.fillRect(player.x + 2, player.y + 8, 1, 1)
+        ctx.fillStyle = 'white';
+        ctx.fillRect(player.x + 3, player.y + 8, 1, 1)
+        ctx.fillStyle = 'white';
+        ctx.fillRect(player.x + 4, player.y + 8, 1, 1)
+        ctx.fillStyle = 'white';
+        ctx.fillRect(player.x + 5, player.y + 8, 1, 1)
+        ctx.fillStyle = 'white';
+        ctx.fillRect(player.x + 6, player.y + 8, 1, 1)
+        ctx.fillStyle = 'white';
+        ctx.fillRect(player.x + 7, player.y + 8, 1, 1)
+        ctx.fillStyle = 'white';
+        ctx.fillRect(player.x + 8, player.y + 7, 1, 1)
+
+
+
+
+
+
+        //haar
+        ctx.fillStyle = '#5b2a33';
+        ctx.fillRect(player.x + -2, player.y + 4, 1, 1)
+        ctx.fillStyle = '#5b2a33';
+        ctx.fillRect(player.x + -2, player.y + 3, 1, 1)
+        ctx.fillStyle = '#5b2a33';
+        ctx.fillRect(player.x + -1, player.y + 3, 1, 1)
+        ctx.fillStyle = '#5b2a33';
+        ctx.fillRect(player.x + 0, player.y + 2, 1, 1)
+        ctx.fillStyle = '#5b2a33';
+        ctx.fillRect(player.x + 1, player.y + 1, 1, 1)
+        ctx.fillStyle = '#5b2a33';
+        ctx.fillRect(player.x + 2, player.y + 1, 1, 1)
+        ctx.fillStyle = '#5b2a33';
+        ctx.fillRect(player.x + 3, player.y + 0, 1, 1)
+        ctx.fillStyle = '#5b2a33';
+        ctx.fillRect(player.x + 4, player.y + 0, 1, 1)
+        ctx.fillStyle = '#5b2a33';
+        ctx.fillRect(player.x + 5, player.y + 0, 1, 1)
+        ctx.fillStyle = '#5b2a33';
+        ctx.fillRect(player.x + 6, player.y + 0, 1, 1)
+        ctx.fillStyle = '#5b2a33';
+        ctx.fillRect(player.x + 7, player.y + 0, 1, 1)
+        ctx.fillStyle = '#5b2a33';
+        ctx.fillRect(player.x + 8, player.y + 1, 1, 1)
+        ctx.fillStyle = '#5b2a33';
+        ctx.fillRect(player.x + 9, player.y + 2, 1, 1)
+        ctx.fillStyle = '#5b2a33';
+        ctx.fillRect(player.x + 10, player.y + 2, 1, 1)
+        ctx.fillStyle = '#5b2a33';
+        ctx.fillRect(player.x + 4, player.y + -1, 1, 1)
+        ctx.fillStyle = '#5b2a33';
+        ctx.fillRect(player.x + 3, player.y + -2, 1, 1)
+        ctx.fillStyle = '#5b2a33';
+        ctx.fillRect(player.x + 5, player.y + -2, 1, 1)
+        ctx.fillStyle = '#5b2a33';
+        ctx.fillRect(player.x + 6, player.y + -1, 1, 1)
+        ctx.fillStyle = '#944445';
+        ctx.fillRect(player.x + -2, player.y + 2, 1, 1)
+        ctx.fillStyle = '#944445';
+        ctx.fillRect(player.x + -2, player.y + 1, 1, 1)
+        ctx.fillStyle = '#944445';
+        ctx.fillRect(player.x + -1, player.y + 2, 1, 1)
+        ctx.fillStyle = '#944445';
+        ctx.fillRect(player.x + -1, player.y + 0, 1, 1)
+        ctx.fillStyle = '#944445';
+        ctx.fillRect(player.x + 0, player.y + -1, 1, 1)
+        ctx.fillStyle = '#944445';
+        ctx.fillRect(player.x + 1, player.y + -2, 1, 1)
+        ctx.fillStyle = '#944445';
+        ctx.fillRect(player.x + 2, player.y + -2, 1, 1)
+        ctx.fillStyle = '#944445';
+        ctx.fillRect(player.x + 6, player.y + -2, 1, 1)
+        ctx.fillStyle = '#944445';
+        ctx.fillRect(player.x + 7, player.y + -2, 1, 1)
+        ctx.fillStyle = '#944445';
+        ctx.fillRect(player.x + 8, player.y + -2, 1, 1)
+        ctx.fillStyle = '#944445';
+        ctx.fillRect(player.x + 7, player.y + -1, 1, 1)
+        ctx.fillStyle = '#944445';
+        ctx.fillRect(player.x + 8, player.y + -1, 1, 1)
+        ctx.fillStyle = '#944445';
+        ctx.fillRect(player.x + 8, player.y + 0, 1, 1)
+        ctx.fillStyle = '#944445';
+        ctx.fillRect(player.x + 9, player.y + 1, 1, 1)
+        ctx.fillStyle = '#944445';
+        ctx.fillRect(player.x + 0, player.y + 1, 1, 1)
+        ctx.fillStyle = '#944445';
+        ctx.fillRect(player.x + 1, player.y + 0, 1, 1)
+        ctx.fillStyle = '#944445';
+        ctx.fillRect(player.x + 2, player.y + 0, 1, 1)
+        ctx.fillStyle = '#944445';
+        ctx.fillRect(player.x + 2, player.y + -1, 1, 1)
+        ctx.fillStyle = '#944445';
+        ctx.fillRect(player.x + 3, player.y + -1, 1, 1)
+        ctx.fillStyle = '#c77b4d';
+        ctx.fillRect(player.x + 1, player.y + -1, 1, 1)
+        ctx.fillStyle = '#c77b4d';
+        ctx.fillRect(player.x + 0, player.y + 0, 1, 1)
+        ctx.fillStyle = '#c77b4d';
+        ctx.fillRect(player.x + -1, player.y + 1, 1, 1)
+        ctx.fillStyle = '#c77b4d';
+        ctx.fillRect(player.x + 9, player.y + -1, 1, 1)
+        ctx.fillStyle = '#c77b4d';
+        ctx.fillRect(player.x + 9, player.y + 0, 1, 1)
+        ctx.fillStyle = '#c77b4d';
+        ctx.fillRect(player.x + 10, player.y + 0, 1, 1)
+        ctx.fillStyle = '#c77b4d';
+        ctx.fillRect(player.x + 10, player.y + 1, 1, 1)
+        ctx.fillStyle = '#c77b4d';
+        ctx.fillRect(player.x + 8, player.y + -2, 1, 1)
+
+        //zijkantenlijen
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 0, player.y + 8, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 0, player.y + 9, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 9, player.y + 9, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 10, player.y + 8, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 10, player.y + 7, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 10, player.y + 6, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 10, player.y + 5, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 10, player.y + 4, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 10, player.y + 3, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 11, player.y + 3, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 11, player.y + 2, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 11, player.y + 1, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 11, player.y + 0, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 10, player.y + -1, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 9, player.y + -2, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 8, player.y + -3, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 7, player.y + -3, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 6, player.y + -3, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 5, player.y + -3, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 4, player.y + -3, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 3, player.y + -3, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 2, player.y + -3, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 1, player.y + -3, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 0, player.y + -2, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + -1, player.y + -1, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + -2, player.y + 0, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + -3, player.y + 1, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + -3, player.y + 2, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + -3, player.y + 3, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + -3, player.y + 4, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + -2, player.y + 5, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + -1, player.y + 6, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + -1, player.y + 7, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 0, player.y + 7, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 5, player.y + -1, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 4, player.y + -2, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + -1, player.y + 10, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + -2, player.y + 11, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + -2, player.y + 12, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + -2, player.y + 13, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + -1, player.y + 14, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 0, player.y + 14, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 0, player.y + 15, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 0, player.y + 16, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 0, player.y + 17, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 1, player.y + 17, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 2, player.y + 17, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 3, player.y + 17, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 3, player.y + 16, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 4, player.y + 16, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 5, player.y + 16, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 6, player.y + 16, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 6, player.y + 17, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 7, player.y + 17, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 8, player.y + 17, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 9, player.y + 17, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 9, player.y + 16, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 9, player.y + 15, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 10, player.y + 14, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 11, player.y + 13, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 11, player.y + 12, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 11, player.y + 11, 1, 1)
+        ctx.fillStyle = 'black';
+        ctx.fillRect(player.x + 10, player.y + 10, 1, 1)
+
+
+        //kleren
+        ctx.fillStyle = '#478965';
+        ctx.fillRect(player.x + 0, player.y + 10, 1, 1)
+        ctx.fillStyle = '#478965';
+        ctx.fillRect(player.x + 1, player.y + 10, 1, 1)
+        ctx.fillStyle = '#478965';
+        ctx.fillRect(player.x + 2, player.y + 10, 1, 1)
+        ctx.fillStyle = '#478965';
+        ctx.fillRect(player.x + 3, player.y + 10, 1, 1)
+        ctx.fillStyle = '#478965';
+        ctx.fillRect(player.x + 4, player.y + 10, 1, 1)
+        ctx.fillStyle = '#478965';
+        ctx.fillRect(player.x + 5, player.y + 10, 1, 1)
+        ctx.fillStyle = '#478965';
+        ctx.fillRect(player.x + 6, player.y + 10, 1, 1)
+        ctx.fillStyle = '#478965';
+        ctx.fillRect(player.x + 7, player.y + 10, 1, 1)
+        ctx.fillStyle = '#478965';
+        ctx.fillRect(player.x + 8, player.y + 10, 1, 1)
+        ctx.fillStyle = '#478965';
+        ctx.fillRect(player.x + 9, player.y + 10, 1, 1)
+        ctx.fillStyle = '#478965';
+        ctx.fillRect(player.x + 10, player.y + 11, 1, 1)
+        ctx.fillStyle = '#478965';
+        ctx.fillRect(player.x + 10, player.y + 12, 1, 1)
+        ctx.fillStyle = '#478965';
+        ctx.fillRect(player.x + 9, player.y + 11, 1, 1)
+        ctx.fillStyle = '#478965';
+        ctx.fillRect(player.x + 8, player.y + 11, 1, 1)
+        ctx.fillStyle = '#478965';
+        ctx.fillRect(player.x + 7, player.y + 11, 1, 1)
+        ctx.fillStyle = '#478965';
+        ctx.fillRect(player.x + 5, player.y + 11, 1, 1)
+        ctx.fillStyle = '#478965';
+        ctx.fillRect(player.x + 4, player.y + 11, 1, 1)
+        ctx.fillStyle = '#478965';
+        ctx.fillRect(player.x + 3, player.y + 11, 1, 1)
+        ctx.fillStyle = '#478965';
+        ctx.fillRect(player.x + 2, player.y + 11, 1, 1)
+        ctx.fillStyle = '#478965';
+        ctx.fillRect(player.x + 1, player.y + 11, 1, 1)
+        ctx.fillStyle = '#478965';
+        ctx.fillRect(player.x + 0, player.y + 11, 1, 1)
+        ctx.fillStyle = '#478965';
+        ctx.fillRect(player.x + -1, player.y + 11, 1, 1)
+        ctx.fillStyle = '#478965';
+        ctx.fillRect(player.x + -1, player.y + 12, 1, 1)
+        ctx.fillStyle = '#478965';
+        ctx.fillRect(player.x + 0, player.y + 12, 1, 1)
+        ctx.fillStyle = '#478965';
+        ctx.fillRect(player.x + 2, player.y + 12, 1, 1)
+        ctx.fillStyle = '#478965';
+        ctx.fillRect(player.x + 3, player.y + 12, 1, 1)
+        ctx.fillStyle = '#478965';
+        ctx.fillRect(player.x + 4, player.y + 12, 1, 1)
+        ctx.fillStyle = '#478965';
+        ctx.fillRect(player.x + 5, player.y + 12, 1, 1)
+        ctx.fillStyle = '#478965';
+        ctx.fillRect(player.x + 7, player.y + 12, 1, 1)
+        ctx.fillStyle = '#478965';
+        ctx.fillRect(player.x + 8, player.y + 12, 1, 1)
+        ctx.fillStyle = '#478965';
+        ctx.fillRect(player.x + 9, player.y + 12, 1, 1)
+        ctx.fillStyle = '#478965';
+        ctx.fillRect(player.x + 9, player.y + 12, 1, 1)
+        ctx.fillStyle = '#355455';
+        ctx.fillRect(player.x + 9, player.y + 12, 1, 1)
+        ctx.fillStyle = '#355455';
+        ctx.fillRect(player.x + 6, player.y + 12, 1, 1)
+        ctx.fillStyle = '#355455';
+        ctx.fillRect(player.x + 6, player.y + 11, 1, 1)
+        ctx.fillStyle = '#355455';
+        ctx.fillRect(player.x + 1, player.y + 12, 1, 1)
+        ctx.fillStyle = '#355455';
+        ctx.fillRect(player.x + 6, player.y + 10, 1, 1)
+
+
+
+
+
+        //handen
+        ctx.fillStyle = '#e9be83';
+        ctx.fillRect(player.x + -1, player.y + 13, 1, 1)
+        ctx.fillStyle = '#e9be83';
+        ctx.fillRect(player.x + 0, player.y + 13, 1, 1)
+        ctx.fillStyle = '#e9be83';
+        ctx.fillRect(player.x + 10, player.y + 13, 1, 1)
+
+
+
+        //broek
+        ctx.fillStyle = '#3e3b7a';
+        ctx.fillRect(player.x + 1, player.y + 13, 1, 1)
+        ctx.fillStyle = '#3e3b7a';
+        ctx.fillRect(player.x + 2, player.y + 13, 1, 1)
+        ctx.fillStyle = '#3e3b7a';
+        ctx.fillRect(player.x + 3, player.y + 13, 1, 1)
+        ctx.fillStyle = '#3e3b7a';
+        ctx.fillRect(player.x + 4, player.y + 13, 1, 1)
+        ctx.fillStyle = '#3e3b7a';
+        ctx.fillRect(player.x + 5, player.y + 13, 1, 1)
+        ctx.fillStyle = '#3e3b7a';
+        ctx.fillRect(player.x + 6, player.y + 13, 1, 1)
+        ctx.fillStyle = '#3e3b7a';
+        ctx.fillRect(player.x + 7, player.y + 13, 1, 1)
+        ctx.fillStyle = '#3e3b7a';
+        ctx.fillRect(player.x + 8, player.y + 13, 1, 1)
+        ctx.fillStyle = '#3e3b7a';
+        ctx.fillRect(player.x + 9, player.y + 13, 1, 1)
+        ctx.fillStyle = '#3e3b7a';
+        ctx.fillRect(player.x + 9, player.y + 14, 1, 1)
+        ctx.fillStyle = '#3e3b7a';
+        ctx.fillRect(player.x + 1, player.y + 14, 1, 1)
+        ctx.fillStyle = '#3e3b7a';
+        ctx.fillRect(player.x + 1, player.y + 15, 1, 1)
+        ctx.fillStyle = '#3e3b7a';
+        ctx.fillRect(player.x + 1, player.y + 16, 1, 1)
+        ctx.fillStyle = '#3e3b7a';
+        ctx.fillRect(player.x + 3, player.y + 15, 1, 1)
+        ctx.fillStyle = '#3e3b7a';
+        ctx.fillRect(player.x + 4, player.y + 15, 1, 1)
+        ctx.fillStyle = '#3e3b7a';
+        ctx.fillRect(player.x + 5, player.y + 15, 1, 1)
+        ctx.fillStyle = '#3e3b7a';
+        ctx.fillRect(player.x + 6, player.y + 15, 1, 1)
+        ctx.fillStyle = '#3e3b7a';
+        ctx.fillRect(player.x + 7, player.y + 15, 1, 1)
+        ctx.fillStyle = '#3e3b7a';
+        ctx.fillRect(player.x + 7, player.y + 16, 1, 1)
+        ctx.fillStyle = '#526dd6';
+        ctx.fillRect(player.x + 8, player.y + 16, 1, 1)
+        ctx.fillStyle = '#526dd6';
+        ctx.fillRect(player.x + 8, player.y + 15, 1, 1)
+        ctx.fillStyle = '#526dd6';
+        ctx.fillRect(player.x + 8, player.y + 14, 1, 1)
+        ctx.fillStyle = '#526dd6';
+        ctx.fillRect(player.x + 7, player.y + 14, 1, 1)
+        ctx.fillStyle = '#526dd6';
+        ctx.fillRect(player.x + 6, player.y + 14, 1, 1)
+        ctx.fillStyle = '#526dd6';
+        ctx.fillRect(player.x + 5, player.y + 14, 1, 1)
+        ctx.fillStyle = '#526dd6';
+        ctx.fillRect(player.x + 4, player.y + 14, 1, 1)
+        ctx.fillStyle = '#526dd6';
+        ctx.fillRect(player.x + 3, player.y + 14, 1, 1)
+        ctx.fillStyle = '#526dd6';
+        ctx.fillRect(player.x + 2, player.y + 14, 1, 1)
+        ctx.fillStyle = '#526dd6';
+        ctx.fillRect(player.x + 2, player.y + 15, 1, 1)
+        ctx.fillStyle = '#526dd6';
+        ctx.fillRect(player.x + 2, player.y + 16, 1, 1)
+    }
+
+
+    var boom = {
+        x: 74,
+        y: 0,
+        width: 7,
+        height: 8,
+        color: '#37b44c'
+    }
+    var boom2 = {
+        x: 130,
+        y: 0,
+        width: 7,
+        height: 8,
+        color: '#37b44c'
+    }
+    var boom3 = {
+        x: 50,
+        y: 0,
+        width: 7,
+        height: 8,
+        color: '#37b44c'
+    }
+    var boom4 = {
+        x: 154,
+        y: 0,
+        width: 7,
+        height: 8,
+        color: '#37b44c'
+    }
+
+
+    function drawBoom(obj){
+        ctx.fillStyle = obj.color;
+        ctx.fillRect(obj.x,obj.y,obj.width,obj.height);
+
+
+        //lichtgroen
+        ctx.fillStyle = '#55c850';
+        ctx.fillRect(obj.x + 1,obj.y,1,1);
+        ctx.fillStyle = '#55c850';
+        ctx.fillRect(obj.x + 0,obj.y + 1,1,1);
+        ctx.fillStyle = '#55c850';
+        ctx.fillRect(obj.x + -1,obj.y + 2,1,1);
+        ctx.fillStyle = '#55c850';
+        ctx.fillRect(obj.x + -2,obj.y + 2,1,1);
+        ctx.fillStyle = '#55c850';
+        ctx.fillRect(obj.x + -2,obj.y + 1,1,1);
+        ctx.fillStyle = '#55c850';
+        ctx.fillRect(obj.x + -1,obj.y + 0,1,1);
+        ctx.fillStyle = '#55c850';
+        ctx.fillRect(obj.x + 0,obj.y + -1,1,1);
+        ctx.fillStyle = '#55c850';
+        ctx.fillRect(obj.x + 1,obj.y + -2,1,1);
+        ctx.fillStyle = '#55c850';
+        ctx.fillRect(obj.x + -2,obj.y + 3,1,1);
+        ctx.fillStyle = '#55c850';
+        ctx.fillRect(obj.x + -3,obj.y + 3,1,1);
+        ctx.fillStyle = '#55c850';
+        ctx.fillRect(obj.x + -3,obj.y + 4,1,1);
+        ctx.fillStyle = '#55c850';
+        ctx.fillRect(obj.x + -2,obj.y + 5,1,1);
+        ctx.fillStyle = '#55c850';
+        ctx.fillRect(obj.x + -1,obj.y + 6,1,1);
+        ctx.fillStyle = '#55c850';
+        ctx.fillRect(obj.x + 0,obj.y + 5,1,1);
+        ctx.fillStyle = '#55c850';
+        ctx.fillRect(obj.x + -1,obj.y + 4,1,1);
+        
+
+        //donkergroen
+        ctx.fillStyle = '#2b983e';
+        ctx.fillRect(obj.x, obj.y + 7, 1, 1);
+        ctx.fillStyle = '#2b983e';
+        ctx.fillRect(obj.x + 2, obj.y + 7, 1, 1);
+        ctx.fillStyle = '#2b983e';
+        ctx.fillRect(obj.x + 4, obj.y + 7, 1, 1);
+        ctx.fillStyle = '#2b983e';
+        ctx.fillRect(obj.x + 5, obj.y + 7, 1, 1);
+        ctx.fillStyle = '#2b983e';
+        ctx.fillRect(obj.x + 6, obj.y + 7, 1, 1);
+        ctx.fillStyle = '#2b983e';
+        ctx.fillRect(obj.x + 5, obj.y + 6, 1, 1);
+        ctx.fillStyle = '#2b983e';
+        ctx.fillRect(obj.x + 6, obj.y + 6, 1, 1);
+        ctx.fillStyle = '#2b983e';
+        ctx.fillRect(obj.x + 7, obj.y + 6, 1, 1);
+        ctx.fillStyle = '#2b983e';
+        ctx.fillRect(obj.x + 7, obj.y + 5, 1, 1);
+        ctx.fillStyle = '#2b983e';
+        ctx.fillRect(obj.x + 8, obj.y + 4, 1, 1);
+        ctx.fillStyle = '#2b983e';
+        ctx.fillRect(obj.x + 8, obj.y + 3, 1, 1);
+        ctx.fillStyle = '#2b983e';
+        ctx.fillRect(obj.x + 7, obj.y + 3, 1, 1);
+        ctx.fillStyle = '#2b983e';
+        ctx.fillRect(obj.x + 8, obj.y + 2, 1, 1);
+        ctx.fillStyle = '#2b983e';
+        ctx.fillRect(obj.x + 7, obj.y + 1, 1, 1);
+        ctx.fillStyle = '#2b983e';
+        ctx.fillRect(obj.x + 7, obj.y + 0, 1, 1);
+        ctx.fillStyle = '#2b983e';
+        ctx.fillRect(obj.x + 6, obj.y + 0, 1, 1);
+        ctx.fillStyle = '#2b983e';
+        ctx.fillRect(obj.x + 6, obj.y - 1, 1, 1);
+        ctx.fillStyle = '#2b983e';
+        ctx.fillRect(obj.x + 5, obj.y - 1, 1, 1);
+        ctx.fillStyle = '#2b983e';
+        ctx.fillRect(obj.x + 4, obj.y - 2, 1, 1);
+        ctx.fillStyle = '#2b983e';
+        ctx.fillRect(obj.x + 3, obj.y - 1, 1, 1);
+        ctx.fillStyle = '#2b983e';
+        ctx.fillRect(obj.x + 4, obj.y + 0, 1, 1);
+        ctx.fillStyle = '#2b983e';
+        ctx.fillRect(obj.x + 5, obj.y + 1, 1, 1);
+        ctx.fillStyle = '#2b983e';
+        ctx.fillRect(obj.x + 6, obj.y + 2, 1, 1);
+        ctx.fillStyle = '#2b983e';
+        ctx.fillRect(obj.x + 7, obj.y + 3, 1, 1);
+        ctx.fillStyle = '#2b983e';
+        ctx.fillRect(obj.x + 4, obj.y + 2, 1, 1);
+        ctx.fillStyle = '#2b983e';
+        ctx.fillRect(obj.x + 5, obj.y + 3, 1, 1);
+        ctx.fillStyle = '#2b983e';
+        ctx.fillRect(obj.x + 6, obj.y + 4, 1, 1);
+        ctx.fillStyle = '#2b983e';
+        ctx.fillRect(obj.x + 4, obj.y + 4, 1, 1);
+        ctx.fillStyle = '#2b983e';
+        ctx.fillRect(obj.x + 3, obj.y + 5, 1, 1);
+
+
+        //boomstam
+        ctx.fillStyle = '#845830';
+        ctx.fillRect(obj.x + 3, obj.y + 7, 1, 1);
+        ctx.fillStyle = '#845830';
+        ctx.fillRect(obj.x + 4, obj.y + 6, 1, 1);
+        ctx.fillStyle = '#845830';
+        ctx.fillRect(obj.x + 5, obj.y + 5, 1, 1);
+        ctx.fillStyle = '#845830';
+        ctx.fillRect(obj.x + 5, obj.y + 4, 1, 1);
+        ctx.fillStyle = '#845830';
+        ctx.fillRect(obj.x + 2, obj.y + 6, 1, 1);
+        ctx.fillStyle = '#845830';
+        ctx.fillRect(obj.x + 1, obj.y + 5, 1, 1);
+        ctx.fillStyle = '#845830';
+        ctx.fillRect(obj.x + 3, obj.y + 8, 1, 1);
+        ctx.fillStyle = '#845830';
+        ctx.fillRect(obj.x + 3, obj.y + 9, 1, 1);
+        ctx.fillStyle = '#845830';
+        ctx.fillRect(obj.x + 3, obj.y + 10, 1, 1);
+        ctx.fillStyle = '#845830';
+        ctx.fillRect(obj.x + 3, obj.y + 11, 1, 1);
+        ctx.fillStyle = '#845830';
+        ctx.fillRect(obj.x + 3, obj.y + 12, 1, 1);
+        ctx.fillStyle = '#845830';
+        ctx.fillRect(obj.x + 3, obj.y + 13, 1, 1);
+        ctx.fillStyle = '#845830';
+        ctx.fillRect(obj.x + 3, obj.y + 14, 1, 1);
+
+
+        //onderkant
+        ctx.fillStyle = '#dcccb3';
+        ctx.fillRect(obj.x + 3,obj.y +15,1,1);
+        ctx.fillStyle = '#dcccb3';
+        ctx.fillRect(obj.x + 1,obj.y +15,1,1);
+        ctx.fillStyle = '#dcccb3';
+        ctx.fillRect(obj.x + 5,obj.y +15,1,1);
+        ctx.fillStyle = '#ece8ca';
+        ctx.fillRect(obj.x + 2,obj.y +15,1,1);
+        ctx.fillStyle = '#ece8ca';
+        ctx.fillRect(obj.x + 4,obj.y +15,1,1);
+        
+        
+       //inkleuren
+       ctx.fillStyle = obj.color;
+        ctx.fillRect(obj.x + 1, obj.y - 1, 1, 1);
+        ctx.fillStyle = obj.color;
+        ctx.fillRect(obj.x + 2, obj.y - 1, 1, 1);
+        ctx.fillStyle = obj.color;
+        ctx.fillRect(obj.x + 2, obj.y - 2, 1, 1);
+        ctx.fillStyle = obj.color;
+        ctx.fillRect(obj.x + 3, obj.y - 2, 1, 1);
+        ctx.fillStyle = obj.color;
+        ctx.fillRect(obj.x + 4, obj.y - 1, 1, 1);
+        ctx.fillStyle = obj.color;
+        ctx.fillRect(obj.x + 7, obj.y + 2, 1, 1);
+        ctx.fillStyle = obj.color;
+        ctx.fillRect(obj.x + 7, obj.y + 4, 1, 1);
+        ctx.fillStyle = obj.color;
+        ctx.fillRect(obj.x - 1, obj.y + 1, 1, 1);
+        ctx.fillStyle = obj.color;
+        ctx.fillRect(obj.x - 1, obj.y + 3, 1, 1);
+        ctx.fillStyle = obj.color;
+        ctx.fillRect(obj.x - 2, obj.y + 4, 1, 1);
+        ctx.fillStyle = obj.color;
+        ctx.fillRect(obj.x - 1, obj.y + 5, 1, 1);
+
+
+       //zwartenranden
+       ctx.fillStyle = 'black';
+        ctx.fillRect(obj.x - 4, obj.y + 4, 1, 1);
+        ctx.fillStyle = 'black';
+        ctx.fillRect(obj.x - 4, obj.y + 3, 1, 1);
+        ctx.fillStyle = 'black';
+        ctx.fillRect(obj.x - 3, obj.y + 2, 1, 1);
+        ctx.fillStyle = 'black';
+        ctx.fillRect(obj.x - 3, obj.y + 1, 1, 1);
+        ctx.fillStyle = 'black';
+        ctx.fillRect(obj.x - 2, obj.y + 0, 1, 1);
+        ctx.fillStyle = 'black';
+        ctx.fillRect(obj.x - 1, obj.y - 1, 1, 1);
+        ctx.fillStyle = 'black';
+        ctx.fillRect(obj.x, obj.y - 2, 1, 1);
+        ctx.fillStyle = 'black';
+        ctx.fillRect(obj.x + 1, obj.y - 3, 1, 1);
+        ctx.fillStyle = 'black';
+        ctx.fillRect(obj.x + 2, obj.y - 3, 1, 1);
+        ctx.fillStyle = 'black';
+        ctx.fillRect(obj.x + 3, obj.y - 3, 1, 1);
+        ctx.fillStyle = 'black';
+        ctx.fillRect(obj.x + 4, obj.y - 3, 1, 1);
+        ctx.fillStyle = 'black';
+        ctx.fillRect(obj.x + 5, obj.y - 2, 1, 1);
+        ctx.fillStyle = 'black';
+        ctx.fillRect(obj.x + 6, obj.y - 2, 1, 1);
+        ctx.fillStyle = 'black';
+        ctx.fillRect(obj.x + 7, obj.y - 1, 1, 1);
+        ctx.fillStyle = 'black';
+        ctx.fillRect(obj.x + 8, obj.y, 1, 1);
+        ctx.fillStyle = 'black';
+        ctx.fillRect(obj.x + 8, obj.y + 1, 1, 1);
+        ctx.fillStyle = 'black';
+        ctx.fillRect(obj.x + 9, obj.y + 2, 1, 1);
+        ctx.fillStyle = 'black';
+        ctx.fillRect(obj.x + 9, obj.y + 3, 1, 1);
+        ctx.fillStyle = 'black';
+        ctx.fillRect(obj.x + 9, obj.y + 4, 1, 1);
+        ctx.fillStyle = 'black';
+        ctx.fillRect(obj.x + 8, obj.y + 5, 1, 1);
+        ctx.fillStyle = 'black';
+        ctx.fillRect(obj.x + 8, obj.y + 6, 1, 1);
+        ctx.fillStyle = 'black';
+        ctx.fillRect(obj.x + 7, obj.y + 7, 1, 1);
+        ctx.fillStyle = 'black';
+        ctx.fillRect(obj.x + 6, obj.y + 8, 1, 1);
+        ctx.fillStyle = 'black';
+        ctx.fillRect(obj.x + 5, obj.y + 8, 1, 1);
+        ctx.fillStyle = 'black';
+        ctx.fillRect(obj.x + 4, obj.y + 8, 1, 1);
+        ctx.fillStyle = 'black';
+        ctx.fillRect(obj.x + 4, obj.y + 9, 1, 1);
+        ctx.fillStyle = 'black';
+        ctx.fillRect(obj.x + 4, obj.y + 10, 1, 1);
+        ctx.fillStyle = 'black';
+        ctx.fillRect(obj.x + 4, obj.y + 11, 1, 1);
+        ctx.fillStyle = 'black';
+        ctx.fillRect(obj.x + 4, obj.y + 12, 1, 1);
+        ctx.fillStyle = 'black';
+        ctx.fillRect(obj.x + 4, obj.y + 13, 1, 1);
+        ctx.fillStyle = 'black';
+        ctx.fillRect(obj.x + 4, obj.y + 14, 1, 1);
+        ctx.fillStyle = 'black';
+        ctx.fillRect(obj.x + 5, obj.y + 14, 1, 1);
+        ctx.fillStyle = 'black';
+        ctx.fillRect(obj.x + 6, obj.y + 15, 1, 1);
+        ctx.fillStyle = 'black';
+        ctx.fillRect(obj.x + 5, obj.y + 16, 1, 1);
+        ctx.fillStyle = 'black';
+        ctx.fillRect(obj.x + 4, obj.y + 16, 1, 1);
+        ctx.fillStyle = 'black';
+        ctx.fillRect(obj.x + 3, obj.y + 16, 1, 1);
+        ctx.fillStyle = 'black';
+        ctx.fillRect(obj.x + 2, obj.y + 16, 1, 1);
+        ctx.fillStyle = 'black';
+        ctx.fillRect(obj.x + 1, obj.y + 16, 1, 1);
+        ctx.fillStyle = 'black';
+        ctx.fillRect(obj.x, obj.y + 15, 1, 1);
+        ctx.fillStyle = 'black';
+        ctx.fillRect(obj.x + 1, obj.y + 14, 1, 1);
+        ctx.fillStyle = 'black';
+        ctx.fillRect(obj.x + 2, obj.y + 14, 1, 1);
+        ctx.fillStyle = 'black';
+        ctx.fillRect(obj.x + 2, obj.y + 13, 1, 1);
+        ctx.fillStyle = 'black';
+        ctx.fillRect(obj.x + 2, obj.y + 12, 1, 1);
+        ctx.fillStyle = 'black';
+        ctx.fillRect(obj.x + 2, obj.y + 11, 1, 1);
+        ctx.fillStyle = 'black';
+        ctx.fillRect(obj.x + 2, obj.y + 10, 1, 1);
+        ctx.fillStyle = 'black';
+        ctx.fillRect(obj.x + 2, obj.y + 9, 1, 1);
+        ctx.fillStyle = 'black';
+        ctx.fillRect(obj.x + 2, obj.y + 8, 1, 1);
+        ctx.fillStyle = 'black';
+        ctx.fillRect(obj.x + 1, obj.y + 8, 1, 1);
+        ctx.fillStyle = 'black';
+        ctx.fillRect(obj.x, obj.y + 8, 1, 1);
+        ctx.fillStyle = 'black';
+        ctx.fillRect(obj.x - 1, obj.y + 7, 1, 1);
+        ctx.fillStyle = 'black';
+        ctx.fillRect(obj.x - 2, obj.y + 6, 1, 1);
+        ctx.fillStyle = 'black';
+        ctx.fillRect(obj.x - 3, obj.y + 5, 1, 1);
+
+
+    }
+
+
+
+
+    
+
+  
+    var checkstatus = true
+
+    // function updatePlayerPosition() {
+
+    //     if (checkstatus) {
+    //         player.height = 10.2;
+    //     }
+    //     else {
+    //         player.height = 10;
+    //     }
+    //     checkstatus = !checkstatus;
+    //     // console.log(checkstatus);
+    // }
+    // setInterval(updatePlayerPosition, 800);
+
+    var pad = {
+        x: 85,
+        y: -50,
+        width: 40,
+        height: 160,
+        color: "#b88662"
+    }
+    var pad2 = {
+        x: 30,
+        y: 20,
+        width: 160,
+        height: 40,
+        color: "#b88662"
+    }
+
+    function drawPad() {
+
+
+
+
+        ctx.fillStyle = pad.color;
+        ctx.fillRect(pad.x, pad.y, pad.width, pad.height);
+
+        ctx.fillStyle = pad2.color;
+        ctx.fillRect(pad2.x, pad2.y, pad2.width, pad2.height);
+
+    }
+
+    var checkPlayerPosition = true;
+
+    document.addEventListener('keydown', function (e) {
+        keyState[e.key] = true;
+    });
+
+    document.addEventListener('keyup', function (e) {
+        keyState[e.key] = false;
+    });
+
+    var runspeed = 2;
+
+    var oppakkenBezit = false;
+
+    const backgroundImage = new Image();
+    backgroundImage.src = 'Achtergrond/360_F_443693302_83W0kKQ5aoPXUSMAozsQaBTwAqBykhKy.jpg';
+
+    const npc1 = new Image();
+    npc1.src = 'gamefotos/fotochick.png';
+
+    var kanlopen = true;
+    
+    var showmap = false;
+
+    function update() {
+        if(kanlopen){
+            if (keyState['w']) player.y -= runspeed;
+            if (keyState['W']) player.y -= runspeed;
+            if (keyState['a']) player.x -= runspeed, checkPlayerPosition = false;
+            if (keyState['A']) player.x -= runspeed, checkPlayerPosition = false;
+            if (keyState['s']) player.y += runspeed;
+            if (keyState['S']) player.y += runspeed;
+            if (keyState['d']) player.x += runspeed, checkPlayerPosition = true;
+            if (keyState['D']) player.x += runspeed, checkPlayerPosition = true;
+            if (keyState['m']) showmap = true; else showmap = false;
+            if (vuilnisActive && vuilnis.releaseDelay > 0) {
+                vuilnis.releaseDelay--; // Decrease the release delay
+            }
+            if (vuilnisLife) {
+                if (keyState['e'] && vuilnisActive) {
+                    if (vuilnis.releaseDelay <= 0) {
+                        // If the red block is already active and the delay has passed, deactivate it
+                        vuilnisActive = false;
+                        vuilnis.y = vuilnis.y + 5;
+                        vuilnis.releaseDelay = 0; // Reset the release delay
+                        oppakkenBezit = false;
+                    }
+                } else if (
+                    keyState['e'] &&
+                    !vuilnisActive &&
+                    player.x + player.width > vuilnis.x &&
+                    player.x < vuilnis.x + vuilnis.width &&
+                    player.y + player.height > vuilnis.y &&
+                    player.y < vuilnis.y + vuilnis.height && !oppakkenBezit
+                ) {
+                    vuilnisActive = true; // Set the flag to indicate the red block is picked up
+                    vuilnis.releaseDelay = 30; // Set a delay before releasing the red block
+                    oppakkenBezit = true;
+                }
+                if (!vuilnisActive && // Check if red block is not active
+                    vuilnisbak.x + vuilnisbak.width > vuilnis.x &&
+                    vuilnisbak.x < vuilnis.x + vuilnis.width &&
+                    vuilnisbak.y + vuilnisbak.height > vuilnis.y &&
+                    vuilnisbak.y < vuilnis.y + vuilnis.height
+                ) {
+                    // Only remove the red block if it's not active
+                    vuilnisActive = false;
+                    vuilnis = null;
+                    vuilnisLife = false;
+                }
+            }
+
+        }
+
+        // Wis het hele canvas
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Verplaats het coördinaatsysteem van de tekening naar het bovenste linkerhoek van de speler
+        ctx.translate(-player.x + canvas.width / 2 - player.width / 2, -player.y + canvas.height / 2 - player.height / 2);
+
+
+
+
+
+        //achtergrond
+        ctx.drawImage(backgroundImage, 0, 0, canvas.width - 100, canvas.height -50);
+        ctx.drawImage(backgroundImage, 0, 100, canvas.width - 100, canvas.height -50); 
+        ctx.drawImage(backgroundImage, 0, -100, canvas.width - 100, canvas.height -50); 
+        ctx.drawImage(backgroundImage, 150, -100, canvas.width - 100, canvas.height -50); 
+        ctx.drawImage(backgroundImage, 150, 100, canvas.width - 100, canvas.height -50);
+        ctx.drawImage(backgroundImage, 150, 0, canvas.width - 100, canvas.height -50);
+        ctx.drawImage(backgroundImage, -150, -100, canvas.width - 100, canvas.height -50); 
+        ctx.drawImage(backgroundImage, -150, 100, canvas.width - 100, canvas.height -50); 
+        ctx.drawImage(backgroundImage, -150, 0, canvas.width - 100, canvas.height -50); 
+        
+
+
+
+        // Teken het blok op de verschoven locatie
+        drawPad();
+        drawBoom(boom);
+        drawBoom(boom2);
+        drawBoom(boom3);
+        drawBoom(boom4);
+
+
+
+
+
+
+      
+        
+        drawBankje(bankje);
+        drawBankje(bankje2);
+        drawVelnisbak();
+
+
+
+
+
+        if (checkPlayerPosition) {
+            drawPlayerRight();
+        }
+        else {
+            drawPlayerLeft();
+        }
+
+        if (vuilnisActive) {
+            // If the red block is picked up, move it above the player
+            vuilnis.x = player.x + player.width / 2 - vuilnis.width / 2;
+            vuilnis.y = player.y - vuilnis.height + 20;
+        }
+
+        if (vuilnisLife) {
+            drawVuilnis(vuilnis);
+        }
+
+        if(showmap){
+            map.style.display = 'block';
+        }
+        else{
+            map.style.display = 'none';
+        }
+
+
+        
+
+
+        // Herstel de tekeninstellingen
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
+        
+        requestAnimationFrame(update);
+    }
+  
+
+
+    canvas.focus();
+
+    update();
+
+    if(spelgestart){
+        update();
+    }
+
+
+
+
+    function startSpel(){
+       
+        spelgestart = true;
+        transition.classList.add('animatie');
+        setTimeout(() => {
+            canvas.style.display = 'block';
+            beginscherm.style.display = 'none';
+            update();
+        }, 1100);
+
+            
+    }
+
+
+
+
+    var checktekst = 0;
+
+    
+
+    const textToDisplay = "Welkom Bij MilieuVriendjes!";
+    let currentIndex = 0;
+
+    function displayNextCharacter() {
+        if (currentIndex < textToDisplay.length) {
+            tekstvoornpc.innerHTML += textToDisplay[currentIndex];
+            currentIndex++;
+            if (checktekst === 0) {
+                setTimeout(displayNextCharacter, 25);
+            }
+        }
+    }
+
+    displayNextCharacter();
+
+
+    var eindetekst = false;
+
+
+    function volgendetekst() {
+        checktekst += 1;
+        console.log(checktekst);
+
+        if (checktekst === 1) {
+            tekstvoornpc.innerHTML = '';
+            var tekstcontent = 'In de wereld van ons spel, heeft het lot van de planeet de balans bereikt tussen redding en ondergang, en er is dringend behoefte aan helden die zich inzetten voor de verbetering van het milieu en de redding van onze geliefde aarde.';
+            currentIndex = 0;
+            tekstvoornpc.style.position = 'relative';
+
+            function displayNextCharacter() {
+                if (currentIndex < tekstcontent.length) {
+                    tekstvoornpc.innerHTML += tekstcontent[currentIndex];
+                    currentIndex++;
+                    setTimeout(displayNextCharacter, 25);
+                }
+            }
+
+            displayNextCharacter();
+        }
+        if(checktekst === 2){
+            tekstvoornpc.innerHTML = '';
+            var tekstcontent = 'Tijdens je avontuur kom je een bijzondere persoon tegen, een ware kampioen van de natuur en een bron van inspiratie voor alle mensen die de planeet willen redden.';
+            currentIndex = 0;
+
+            function displayNextCharacter() {
+                if (currentIndex < tekstcontent.length) {
+                    tekstvoornpc.innerHTML += tekstcontent[currentIndex];
+                    currentIndex++;
+                    setTimeout(displayNextCharacter, 25);
+                }
+            }
+
+            displayNextCharacter();
+        }
+
+        if(checktekst === 3){
+            tekstvoornpc.innerHTML = '';
+            var tekstcontent = 'Deze persoon, genaamd Elyria, is een oude woudnimf die leeft in het hart van het eeuwenoude Woud der Wijsheid. Ze is de belichaming van de natuurlijke schoonheid en wijsheid van de planeet. Met haar glinsterende groene ogen en een mantel van levendige bladeren, straalt Elyria een serene kracht uit.';
+            currentIndex = 0;
+
+            function displayNextCharacter() {
+                if (currentIndex < tekstcontent.length) {
+                    tekstvoornpc.innerHTML += tekstcontent[currentIndex];
+                    currentIndex++;
+                    setTimeout(displayNextCharacter, 25);
+                }
+            }
+
+            displayNextCharacter();
+        }
+
+        if(checktekst === 4){
+            tekstvoornpc.innerHTML = '';
+            var tekstcontent = 'Ze heeft de kracht om te communiceren met alle wezens van het bos, van majestueuze herten tot de kleinste mieren, en ze deelt een diepgaande connectie met de planeet zelf. Elyria zal je verder begeleiden ontmoet haar in het magische bos. Veel succes!';
+            currentIndex = 0;
+
+            function displayNextCharacter() {
+                if (currentIndex < tekstcontent.length) {
+                    tekstvoornpc.innerHTML += tekstcontent[currentIndex];
+                    currentIndex++;
+                    setTimeout(displayNextCharacter, 25);
+                }
+            }
+
+            displayNextCharacter();
+        }
+
+        if (checktekst === 5) {
+            tekstvoornpc.innerHTML = '';
+            tekstvoornpc.style.position = 'fixed'
+            var tekstcontent = 'Ga naar het noorden voor het magische bos.';
+            currentIndex = 0;
+
+            function displayNextCharacter() {
+                    if (currentIndex < tekstcontent.length) {
+                        tekstvoornpc.innerHTML += tekstcontent[currentIndex];
+                        currentIndex++;
+                        setTimeout(displayNextCharacter, 25);
+                    }     
+            }
+            displayNextCharacter();
+
+            npcmeisje1.src = 'gamefotos/istockphoto-1438432221-1024x1024-removebg-preview.png';
+                    var leftp = 57;
+
+                    function delayedLoop(iterations, delay) {
+                        let count = 0;
+
+                        function loopIteration() {
+                            if (count < iterations) {
+                                leftp++;
+                                npcmeisje1.style.left = leftp + '%';
+
+                                count++;
+
+
+                                setTimeout(loopIteration, delay);
+                            }
+                        }
+
+                        // Start the loop
+                        loopIteration();
+                    }
+
+                    delayedLoop(50, 40);
+
+                    setTimeout(() => {
+                        eindetekst = true;
+                        console.log(eindetekst);
+                    }, 2500);
+                
+       
+        }
+
+        if (eindetekst) {
+            achtergrondvoortekstnpc.style.display = 'none';
+            kanlopen =true;
+        }
+    }
+
+
+</script>
+
+</html>
